@@ -62,7 +62,15 @@ app.get("/compose", (req, res) => {
     res.render("compose", {});
 });
 
-app.post("/compose", (req, res) => {
+app.post("/compose", async (req, res) => {
+    const title = req.body.title;
+    const content = req.body.content;
+
+    await Post.create({
+        title: title,
+        content: content
+    });
+    
     res.redirect("/");
 });
 

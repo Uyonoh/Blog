@@ -1,0 +1,16 @@
+<%- include("partials/header") -%>
+    
+<section class="container compose fill-height">
+    <h1>Compose</h1>
+    
+    <form class="flex compose" action="/compose" method="post">
+        <label for="title">Title</label>
+        <input class="fill-width" type="text" name="title" placeholder="Post Title">
+
+        <label for="content">Post</label>
+        <textarea class="fill-width" name="content" placeholder="Up to 500 characters"></textarea>
+        <button type="submit">Post</button>
+    </form>
+</section>
+
+<%- include("partials/footer") -%>

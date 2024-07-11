@@ -42,6 +42,31 @@ header {
     background-color: #f0f0f0;
 }
 
+form.compose {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+form .fill-width {
+    width: 100%;
+    padding: .2rem;
+}
+
+form textarea {
+    height: 200px;
+}
+
+form.compose button {
+    align-self: flex-end;
+    padding: .5rem;
+    background-color: #208bbd;
+    color: #fff;
+    border: none;
+    font-size: 17px;
+    border-radius: 5px;
+}
 
 
 
