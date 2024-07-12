@@ -7,12 +7,14 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Set LIVE environment variable to true to access online DB
-const live = process.env.LIVE;
 
 const username = "turakiuyonoh";
 const password = process.env.PASSWORD;
 const dbName = "blogDB";
+
+// Set LIVE environment variable to true to access online DB
+// else use localy hosted DB
+const live = process.env.LIVE;
 
 if (live) {
     uri = `mongodb+srv://${username}:${password}@cluster0.zpy0xmc.mongodb.net/`;
@@ -21,7 +23,7 @@ if (live) {
 }
 
 uri += dbName;
-console.log(uri);
+console.log("connecting to " + uri);
 mongoose.connect(uri);
 
 const postSchema = new mongoose.Schema({
@@ -36,6 +38,7 @@ const postSchema = new mongoose.Schema({
 });
 
 const Post = mongoose.model("post", postSchema);
+
 
 app.get("/", (req, res) => {
 
