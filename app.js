@@ -7,7 +7,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-const live = false;
+const live = true;
 
 const username = "turakiuyonoh";
 const password = process.env.PASSWORD;
