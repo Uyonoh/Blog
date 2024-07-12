@@ -13,7 +13,7 @@ const password = process.env.PASSWORD;
 const dbName = "blogDB";
 
 // Set LIVE environment variable to true to access online DB
-// else use the localy hosted DB
+// else use localy hosted DB
 const live = process.env.LIVE;
 
 if (live) {
