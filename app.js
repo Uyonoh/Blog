@@ -7,7 +7,8 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-const live = true;
+// Set LIVE environment variable to true to access online DB
+const live = process.env.LIVE;
 
 const username = "turakiuyonoh";
 const password = process.env.PASSWORD;
@@ -72,6 +73,18 @@ app.post("/compose", async (req, res) => {
     });
     
     res.redirect("/");
+});
+
+app.get("/posts/:postTitle", (req, res) => {
+    const postTitle = req.params.postTitle;
+
+    Post.findOne({
+        title: postTitle
+    }).then((post) => {
+        res.render("posts", {post: post});
+    }).catch((err) => {
+        cosole.log(err);
+    })
 });
 
 

@@ -42,6 +42,14 @@ header {
     background-color: #f0f0f0;
 }
 
+.logo a {
+    text-decoration: none;
+}
+
+.logo a:hover {
+    color: #444444;
+}
+
 form.compose {
     width: 100%;
     flex-direction: column;

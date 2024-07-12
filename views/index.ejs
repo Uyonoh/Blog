@@ -11,7 +11,7 @@
                 <p>
                     <%= post.content.slice(0, 100) %>
                     <% if (post.content.length > 100) { %>
-                        ... <a href="<%= post.title %>">Read More</a>
+                        ... <a href="/posts/<%= post.title %>">Read More</a>
                     <% } %>
                 </p>
             </div>
