@@ -1,3 +1,4 @@
 *.py
+!/backend/*.py
 .vscode/
 old-frontend/
