@@ -18,7 +18,7 @@ export const refreshAccessToken = async () => {
 
 
 export const authFetch = async (url: string, options: RequestInit = {}) => {
-  const access = localStorage.getItem("access");
+  const token = localStorage.getItem("access_token") || "";
 
   const fetchWithToken = async (token: string) => {
     return fetch(url, {
@@ -26,19 +26,21 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
       headers: {
         ...(options.headers || {}),
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Token ${token}`,
       },
       credentials: "include",
     });
   };
 
-  let response = await fetchWithToken(access!);
+  let response = await fetchWithToken(token);
 
   if (response.status === 401) {
     try {
-      const newAccess = await refreshAccessToken();
-      response = await fetchWithToken(newAccess);
+      // const newAccess = await refreshAccessToken();
+      // response = await fetchWithToken(newAccess);
+      throw new Error("")
     } catch (err) {
+      console.log("Error: ", err);
       throw new Error("Session expired. Please log in again.");
     }
   }

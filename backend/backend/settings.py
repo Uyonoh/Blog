@@ -34,7 +34,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Your Next.js frontend
+    "http://localhost:3000",  # Next.js frontend
 ]
 
 # Optional: allow credentials for session auth
@@ -130,7 +130,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-EMAIL_VERIFICATION = None
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

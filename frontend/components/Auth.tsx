@@ -32,6 +32,8 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  
+
   // Call to ensure CSRF token is set
   getCSRFToken();
 
@@ -39,10 +41,25 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
     e.preventDefault();
     setError("");
 
-    const endpoint = isRegister ? "register" : "token"; // Determine endpoint
+    const register = async (url: string, options: RequestInit) => {
+      const response = await fetch(url,{
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token ",
+      },
+      credentials: "include",
+    }
+  );
+    console.log("RESPON: ", response.text());
+    return response;
+  }
+
+    const endpoint = isRegister ? "register" : "login"; // Determine endpoint
     const body = isRegister
-      ? { username, email, password, password2 }
+      ? { username, email, password1, password2 }
       : { username, password };
+    const meth = isRegister? register : authFetch;
 
     try {
       const response = await authFetch(
@@ -53,13 +70,6 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
         }
       );
 
-      // const response = await fetch(`http://localhost:8000/auth/${endpoint}/`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   credentials: "include", // Important for including the session cookies
-      //   body: JSON.stringify(body),
-      // });
-
       if (!response.ok) {
         throw new Error(
           isRegister ? "Registration failed" : "Invalid credentials"
@@ -68,11 +78,11 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
 
       const data = await response.json();
       console.log(data);
-      localStorage.setItem("access", data.access); // Store JWT access token
-      localStorage.setItem("refresh", data.refresh); // Store refresh token
-      // localStorage.setItem("username", data.username); // Store username
-      const decoded: DecodedToken = jwtDecode(data.access);
-      localStorage.setItem("username", decoded.username); // now stored for use in comments
+      localStorage.setItem("token", data.key); // Store JWT access token
+      // localStorage.setItem("refresh", data.refresh); // Store refresh token
+      // // localStorage.setItem("username", data.username); // Store username
+      // const decoded: DecodedToken = jwtDecode(data.access);
+      // localStorage.setItem("username", decoded.username); // now stored for use in comments
 
       // const isHome = (router.pathname === "/");
       // isHome ? router.reload() : router.push("/"); // Redirect to homepage

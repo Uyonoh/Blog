@@ -27,7 +27,7 @@ from django.urls import path, include
 from dj_rest_auth.views import LoginView
 from dj_rest_auth.registration.views import RegisterView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from .views import CustomTokenObtainPairView
+from .views import CustomTokenObtainPairView, verify_email
 
 
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -72,6 +72,7 @@ urlpatterns = [
     # path('auth/', include('allauth.urls')),
     path('auth/login/', LoginView.as_view(), name='login'),
     path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/regiter/verify-email/<url>', verify_email, name='account_confirm_email'),
     # path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

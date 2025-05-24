@@ -13,7 +13,8 @@ const Header = () => {
 
   useEffect(() => {
     // Check if user is logged in (you may replace this with real auth check)
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem("token");
+    // TODO: Verify token
     setIsAuthenticated(!!token);
   }, []);
 
