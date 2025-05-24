@@ -10,6 +10,7 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         post = self.get_object()
@@ -46,6 +47,12 @@ class PostViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, context={'request': request})
         return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+        import time
+        print(f"USER: {self.request.user}")
+        time.sleep(3)
+        serializer.save(author=self.request.user)
 
     
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { APIROOT } from "../utils/auth";
 import PostCard from "../components/PostCard";
 
 // Define Post type
@@ -17,13 +18,14 @@ type Post = {
 const IndexPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);  // Typing posts state
   const [error, setError] = useState<string | null>(null);  // Error state for error handling
-  const apiUrl = "http://localhost:8000";
+
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/posts/`)
+    fetch(`${APIROOT}/api/posts/`)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("An error occured while getting the data! \
+            please try again later.");
         }
         return res.json();
       })

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import DarkModeToggle from "./DarkModeToggle";
 import Auth from "./Auth";
+import { APIROOT, authFetch } from "../utils/auth";
 
 const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -13,13 +14,14 @@ const Header = () => {
 
   useEffect(() => {
     // Check if user is logged in (you may replace this with real auth check)
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     // TODO: Verify token
     setIsAuthenticated(!!token);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("access");
+    authFetch(APIROOT + "/auth/logout/", {method: "POST"});
+    localStorage.removeItem("access_token");
     localStorage.removeItem("access");
     localStorage.removeItem("username");
     setIsAuthenticated(false);

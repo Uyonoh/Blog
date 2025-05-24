@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { APIROOT } from "../../utils/auth";
 import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
 
@@ -41,7 +42,7 @@ const PostDetail = () => {
   useEffect(() => {
     if (id) {
       // Fetch the post details
-      fetch(`http://localhost:8000/api/posts/${id}`)
+      fetch(`${APIROOT}/api/posts/${id}`)
         .then((response) => response.json())
         .then((data: Post) => {
           setPost(data);
@@ -57,7 +58,7 @@ const PostDetail = () => {
         .catch(() => setError("Failed to load post."));
 
       // Fetch the comments for the post
-      fetch(`http://localhost:8000/api/posts/${id}/comments/`)
+      fetch(`${APIROOT}/api/posts/${id}/comments/`)
         .then((res) => res.json())
         .then((data) => setComments(data))
         .catch(() => setError("Failed to load comments."));
@@ -67,7 +68,7 @@ const PostDetail = () => {
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/posts/${id}/comments/`, {
+      const response = await fetch(`${APIROOT}/api/posts/${id}/comments/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ author, content }),
@@ -79,11 +80,14 @@ const PostDetail = () => {
 
       const newComment: Comment = await response.json();
       setComments([newComment, ...comments]); // Add new comment at the top
-    } catch (error: any) {
-      setError(error.message);
+   } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        console.error('Unexpected error', error);
+      }
     }
-  };
-
+  }
  
 
   if (loading) return <div className="text-center mt-10 text-gray-600 dark:text-gray-300">Loading...</div>;

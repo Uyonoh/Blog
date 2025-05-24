@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { authFetch } from "../utils/auth";
-import { jwtDecode } from "jwt-decode";
+import { APIROOT, authFetch } from "../utils/auth";
 
 type AuthProps = {
   register: boolean;
@@ -17,7 +16,7 @@ type DecodedToken = {
 
 const getCSRFToken = async () => {
   // Ensure CSRF token is available for protected routes
-  await fetch("http://localhost:8000/auth/csrf/", {
+  await fetch(APIROOT + "/auth/csrf/", {
     credentials: "include", // Important for setting cookies
   });
 };
@@ -62,11 +61,15 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
     const meth = isRegister? register : authFetch;
 
     try {
-      const response = await authFetch(
-        `http://localhost:8000/auth/${endpoint}/`,
+      const response = await fetch(
+        `${APIROOT}/auth/${endpoint}/`,
         {
           method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
           body: JSON.stringify(body),
+          credentials: "include"
         }
       );
 
@@ -77,8 +80,8 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       }
 
       const data = await response.json();
-      console.log(data);
-      localStorage.setItem("token", data.key); // Store JWT access token
+      // console.log(data);
+      localStorage.setItem("access_token", data.key); // Store JWT access token
       // localStorage.setItem("refresh", data.refresh); // Store refresh token
       // // localStorage.setItem("username", data.username); // Store username
       // const decoded: DecodedToken = jwtDecode(data.access);
@@ -88,7 +91,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       // isHome ? router.reload() : router.push("/"); // Redirect to homepage
       onLoginSuccess();
       // router.push("/");
-      router.reload();
+      // router.reload();
     } catch (error: any) {
       setError(error.message);
     }
