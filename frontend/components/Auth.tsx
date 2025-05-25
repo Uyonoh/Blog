@@ -89,6 +89,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
         const response = await authFetch(APIROOT + "/auth/user/");
         const data = await response.json();
         localStorage.setItem("username", data.username);
+        localStorage.setItem("admin", data.is_staff);
       } catch(err: unknown) {
         // if (err typeof() string) {
           throw new Error("Failed to get username");

@@ -21,7 +21,7 @@ function CreatePost() {
             body: JSON.stringify(body),
         });
         if (response.ok) {
-            router.push("/post");
+            router.push("/");
         } else {
             throw new Error("Invalid post");
         }

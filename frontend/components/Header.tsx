@@ -11,18 +11,21 @@ const Header = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in (you may replace this with real auth check)
     const token = localStorage.getItem("access_token");
+    const admin = localStorage.getItem("admin");
     // TODO: Verify token
     setIsAuthenticated(!!token);
+    setIsAdmin(admin === "true" ? true : false);
   }, []);
 
   const handleLogout = () => {
     authFetch(APIROOT + "/auth/logout/", {method: "POST"});
     localStorage.removeItem("access_token");
-    localStorage.removeItem("access");
+    localStorage.removeItem("admin");
     localStorage.removeItem("username");
     setIsAuthenticated(false);
     router.push("/");
@@ -69,6 +72,15 @@ const Header = () => {
         >
           Contact
         </Link>
+
+        { isAdmin && (
+          <Link
+            href="/post/create/"
+            className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
+          >
+            Create
+          </Link>
+        ) }
       </nav>
 
       <div className="flex items-center space-x-4">
