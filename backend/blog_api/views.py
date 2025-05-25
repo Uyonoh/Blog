@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Post, Comment, Like
+from .models import Post, Comment, Like, anon
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 from rest_framework.permissions import IsAuthenticated
 
@@ -36,9 +36,12 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         if request.method == 'POST':
+            author = request.user
+            if not request.user.id:
+                author = anon
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.save(post=post)  # Assign comment to the specific post
+                serializer.save(post=post, author=author)  # Assign comment to the specific post
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -61,7 +64,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def perform_create(self, serializer):
-        author = self.request.data.get('author', 'Anonymous')  # Default if not provided
+        author = self.request.user
         serializer.save(author=author)
 
 class LikeViewSet(viewsets.ModelViewSet):
