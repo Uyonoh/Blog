@@ -85,6 +85,15 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       // localStorage.setItem("refresh", data.refresh); // Store refresh token
       // // localStorage.setItem("username", data.username); // Store username
       // const decoded: DecodedToken = jwtDecode(data.access);
+      try {
+        const response = await authFetch(APIROOT + "/auth/user/");
+        const data = await response.json();
+        localStorage.setItem("username", data.username);
+      } catch(err: unknown) {
+        // if (err typeof() string) {
+          throw new Error("Failed to get username");
+        // }
+      }
       // localStorage.setItem("username", decoded.username); // now stored for use in comments
 
       // const isHome = (router.pathname === "/");
