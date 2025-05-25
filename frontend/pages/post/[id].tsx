@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { APIROOT } from "../../utils/auth";
+import { APIROOT, authFetch } from "../../utils/auth";
 import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
 
@@ -68,13 +68,13 @@ const PostDetail = () => {
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {
-      const response = await fetch(`${APIROOT}/api/posts/${id}/comments/`, {
+      const response = await authFetch(`${APIROOT}/api/posts/${id}/comments/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ author, content }),
+        body: JSON.stringify({ content }),
       });
 
       if (!response.ok) {
+        console.log(response.text);
         throw new Error("Too many requests. Please wait a moment.");
       }
 
@@ -145,7 +145,7 @@ const PostDetail = () => {
               No comments yet. Be the first to comment!
             </p>
           ) : (
-            comments.map((comment) => (
+            comments.reverse().map((comment) => (
               <div
                 key={comment.id}
                 className="border border-gray-300 dark:border-gray-700 p-4 rounded-lg"
