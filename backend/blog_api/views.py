@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Post, Comment, Like, anon
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 from rest_framework.permissions import IsAuthenticated
 
@@ -9,10 +9,11 @@ from rest_framework.permissions import IsAuthenticated
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    lookup_field = "slug"
 
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
-    def like(self, request, pk=None):
+    def like(self, request, slug=None):
         post = self.get_object()
         user = request.user
 
@@ -27,7 +28,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
     
     @action(detail=True, methods=['get', 'post'])
-    def comments(self, request, pk=None):
+    def comments(self, request, slug=None):
         post = self.get_object()
         
         if request.method == 'GET':
@@ -38,7 +39,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if request.method == 'POST':
             author = request.user
             if not request.user.id:
-                author = anon
+                author = None
             serializer = CommentSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(post=post, author=author)  # Assign comment to the specific post

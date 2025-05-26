@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 type Post = {
   id: number;         // or string, depending on your backend
+  slug: string;
   title: string;
   summary: string;
   content: string;
@@ -23,7 +24,7 @@ const PostCard = ({ post }: PostCardProps) => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/post/${post.id}`);
+    router.push(`/post/${post.slug}`);
   };
 
   return (

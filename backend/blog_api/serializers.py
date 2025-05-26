@@ -10,7 +10,11 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ["author"]
     
     def get_author(self, obj):
-        return obj.author.username
+        try:
+            username = obj.author.username
+        except AttributeError:
+            username = "Anonymous"
+        return  username
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +33,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
-        fields += ['summary']
+        fields += ['summary', "slug"]
 
     def get_likes_count(self, obj):
         return obj.likes.count()

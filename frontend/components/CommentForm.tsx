@@ -16,7 +16,7 @@ const CommentForm = ({ onSubmit }: CommentFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username || !content) return;
+    if (!content) return;
     onSubmit(username, content);
     setContent("");
   };

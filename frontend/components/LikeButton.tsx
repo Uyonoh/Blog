@@ -2,19 +2,19 @@ import { useState } from "react";
 import {APIROOT, authFetch} from "../utils/auth";
 
 type LikeButtonProps = {
-  postId: number;
+  slug: string;
   initialLikes: number;
   initialLiked: boolean;
 };
 
-export default function LikeButton({ postId, initialLikes, initialLiked }: LikeButtonProps) {
+export default function LikeButton({ slug: slug, initialLikes, initialLiked }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(initialLiked);
   console.log("Like" + liked);
 
   const handleLike = async () => {
     try {
-      const response = await authFetch(`${APIROOT}/api/posts/${postId}/like/`, {
+      const response = await authFetch(`${APIROOT}/api/posts/${slug}/like/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

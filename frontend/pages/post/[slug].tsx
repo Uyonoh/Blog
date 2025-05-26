@@ -19,6 +19,7 @@ type Like = {
 
 type Post = {
   id: number;       // or string, depending on your backend
+  slug: string;
   title: string;
   summary: string;
   content: string;
@@ -31,7 +32,7 @@ type Post = {
 
 const PostDetail = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { slug } = router.query;
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,9 +41,9 @@ const PostDetail = () => {
 
 
   useEffect(() => {
-    if (id) {
+    if (slug) {
       // Fetch the post details
-      fetch(`${APIROOT}/api/posts/${id}`)
+      fetch(`${APIROOT}/api/posts/${slug}`)
         .then((response) => response.json())
         .then((data: Post) => {
           setPost(data);
@@ -58,17 +59,20 @@ const PostDetail = () => {
         .catch(() => setError("Failed to load post."));
 
       // Fetch the comments for the post
-      fetch(`${APIROOT}/api/posts/${id}/comments/`)
+      fetch(`${APIROOT}/api/posts/${slug}/comments/`)
         .then((res) => res.json())
         .then((data) => setComments(data))
-        .catch(() => setError("Failed to load comments."));
+        .catch(() => {
+          console.log("POST: ", post);
+          setError("Failed to load comments.");
+        });
     }
-  }, [id]);
+  }, [slug]);
 
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {
-      const response = await authFetch(`${APIROOT}/api/posts/${id}/comments/`, {
+      const response = await authFetch(`${APIROOT}/api/posts/${slug}/comments/`, {
         method: "POST",
         body: JSON.stringify({ content }),
       });
@@ -119,7 +123,7 @@ const PostDetail = () => {
       <hr className="my-10 border-gray-300 dark:border-gray-700" />
 
       <LikeButton
-        postId={post.id}
+        slug={post.slug}
         initialLikes={post.likes_count}
         initialLiked={liked}
       />
@@ -145,7 +149,7 @@ const PostDetail = () => {
               No comments yet. Be the first to comment!
             </p>
           ) : (
-            comments.reverse().map((comment) => (
+            comments.map((comment) => (
               <div
                 key={comment.id}
                 className="border border-gray-300 dark:border-gray-700 p-4 rounded-lg"
