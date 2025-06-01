@@ -7,6 +7,7 @@ type Post = {
   id: number; // or string, depending on your backend
   title: string;
   content: string;
+  slug: string;
   summary: string;
   author: string;
   created_at: string;

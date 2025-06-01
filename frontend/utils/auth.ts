@@ -1,8 +1,15 @@
 
 const APIROOT = "http://localhost:8000"
 
-const authFetch = async (url: string, options: RequestInit = {}) => {
+const authFetch = async (url: string, options: RequestInit = {}, media: string="") => {
   const token = localStorage.getItem("access_token") || "";
+
+  if (!(media === "media")) {
+    options.headers =  {
+      ...(options.headers),
+      "Content-Type": "application/json"
+    };
+  }
 
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
@@ -16,7 +23,6 @@ const authFetch = async (url: string, options: RequestInit = {}) => {
       ...options,
       headers: {
         ...(options.headers || {}),
-        "Content-Type": "application/json",
         Authorization: `Token ${token}`,
         'X-CSRFToken': csrftoken,
       },

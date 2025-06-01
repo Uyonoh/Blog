@@ -21,6 +21,7 @@ type Post = {
   id: number;       // or string, depending on your backend
   slug: string;
   title: string;
+  image: string;
   summary: string;
   content: string;
   author: string;
@@ -116,6 +117,9 @@ const PostDetail = () => {
       <h1 className="text-5xl font-bold text-gray-900 dark:text-white leading-tight">
         {post.title}
       </h1>
+      <div>
+        <img src={post.image} />
+      </div>
       <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
         {post.content}
       </article>

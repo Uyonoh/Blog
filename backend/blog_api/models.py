@@ -7,6 +7,7 @@ from django.utils.text import slugify
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    image = models.ImageField(upload_to="posts/")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

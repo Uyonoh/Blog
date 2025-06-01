@@ -6,20 +6,32 @@ import { APIROOT, authFetch } from "../../utils/auth";
 function CreatePost() {
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
+    const [image, setImage] = useState<string|Blob>("");
     const router = useRouter()
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+        console.log("files: ", e.target.files[0]);
+        setImage(e.target.files[0]);
+    }
+    };
+
 
     async function handlesubmit(e: React.FormEvent) {
         e.preventDefault()
-        const body = {
-            title: title,
-            content: content
-        }
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("image", image);
+        formData.append("content", content);
 
         const response = await authFetch(
             APIROOT + "/api/posts/", {
             method: "POST",
-            body: JSON.stringify(body),
-        });
+            body: formData,
+            },
+            "media"
+        );
         if (response.ok) {
             router.push("/");
         } else {
@@ -28,7 +40,9 @@ function CreatePost() {
     }
     return(
         <section id="postForm" className="p-10">
-            <form className="w-full max-w-lg" onSubmit={handlesubmit}>
+            <form className="w-full max-w-lg" onSubmit={handlesubmit}
+            encType="multipart/form-data"
+            >
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
                     <label
@@ -48,6 +62,13 @@ function CreatePost() {
                         A fancy title for a viral blog
                     </p>
                     </div>
+                </div>
+                <div className="flex flex-wrap -mx-3 mb-6">
+                    
+                    
+      <input type="file"
+      onChange={(e) => {handleFileChange(e)}}
+        className="w-full text-slate-500 font-medium text-base bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded" />
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">

@@ -53,9 +53,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def perform_create(self, serializer):
-        import time
-        print(f"USER: {self.request.user}")
-        time.sleep(3)
+        
         serializer.save(author=self.request.user)
 
     
