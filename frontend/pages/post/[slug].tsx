@@ -68,7 +68,7 @@ const PostDetail = () => {
           setError("Failed to load comments.");
         });
     }
-  }, [slug]);
+  }, [slug, post]);
 
 
   const handleCommentSubmit = async (author: string, content: string) => {
@@ -118,7 +118,7 @@ const PostDetail = () => {
         {post.title}
       </h1>
       <div>
-        <img src={post.image} />
+        <img src={post.image} alt="Blog post Image"/>
       </div>
       <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
         {post.content}

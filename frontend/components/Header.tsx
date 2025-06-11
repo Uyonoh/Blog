@@ -6,7 +6,7 @@ import Auth from "./Auth";
 import { APIROOT, authFetch } from "../utils/auth";
 
 const Header = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
   const [isRegister, setIsRegister] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -31,20 +31,20 @@ const Header = () => {
     router.push("/");
   };
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem("theme");
+  //   if (savedTheme === "dark") {
+  //     setDarkMode(true);
+  //     document.documentElement.classList.add("dark");
+  //   }
+  // }, []);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    document.documentElement.classList.toggle("dark", newMode);
-    localStorage.setItem("theme", newMode ? "dark" : "light");
-  };
+  // const toggleDarkMode = () => {
+  //   const newMode = !darkMode;
+  //   setDarkMode(newMode);
+  //   document.documentElement.classList.toggle("dark", newMode);
+  //   localStorage.setItem("theme", newMode ? "dark" : "light");
+  // };
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);  // Set authentication state to true
