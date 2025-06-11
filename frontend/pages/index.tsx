@@ -18,14 +18,16 @@ type Post = {
 
 const IndexPage = () => {
   const [posts, setPosts] = useState<Post[]>([]);  // Typing posts state
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);  // Error state for error handling
 
 
   useEffect(() => {
     fetch(`${APIROOT}/api/posts/`)
       .then((res) => {
+        setLoading(false);
         if (!res.ok) {
-          throw new Error("An error occured while getting the data! \
+          setError("An error occured while getting the data! \
             please try again later.");
         }
         return res.json();
@@ -36,6 +38,8 @@ const IndexPage = () => {
         setError("Failed to load posts. Please try again later.");
       });
   }, []);
+
+  if (loading) return <div className="text-center mt-10 text-gray-600 dark:text-gray-300">Loading...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
