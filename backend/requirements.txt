@@ -78,11 +78,11 @@ stack-data==0.6.3
 tinycss2==1.4.0
 tornado==6.5.1
 traitlets==5.14.3
-typing==3.10.0.0
-typing-extensions==4.13.2
-urllib3==2.4.0
-uvicorn==0.34.3
+typing
+typing-extensions
+urllib3
+uvicorn
 wcwidth==0.2.13
 webencodings==0.5.1
-whitenoise==6.9.0
+whitenoise
 yarg==0.1.9
