@@ -2,9 +2,9 @@
 # Exit on erroe
 set -o errexit
 
-pip install uv
+#pip install uv
 
-uv pip install -r requirements.txt
+pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 
