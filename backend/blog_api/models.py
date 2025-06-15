@@ -1,13 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 # anon = User.objects.filter(username="Anonymous")[0]
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    image = models.ImageField(upload_to="posts/")
+    #image = models.ImageField(upload_to="posts/")
+    image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

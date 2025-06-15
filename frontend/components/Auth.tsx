@@ -1,13 +1,11 @@
 import { useState } from "react";
-//import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { APIROOT, authFetch } from "../utils/auth";
 
 type AuthProps = {
   register: boolean;
   onLoginSuccess: () => void; // This callback will be triggered on successful login
 };
-
-
 
 const getCSRFToken = async () => {
   // Ensure CSRF token is available for protected routes
@@ -24,7 +22,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [password2, setPassword2] = useState("");
   const [username, setUsername] = useState(""); // Only for registration
   const [error, setError] = useState("");
-  //const router = useRouter();
+  // const router = useRouter();
 
   
 
@@ -35,19 +33,6 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
     e.preventDefault();
     setError("");
 
-  //   const register = async (url: string, options: RequestInit) => {
-  //     const response = await fetch(url,{
-  //     ...options,
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: "Token ",
-  //     },
-  //     credentials: "include",
-  //   }
-  // );
-  //   console.log("RESPON: ", response.text());
-  //   return response;
-  // }
 
     const endpoint = isRegister ? "register" : "login"; // Determine endpoint
     const body = isRegister
@@ -84,8 +69,8 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
         const data = await response.json();
         localStorage.setItem("username", data.username);
         localStorage.setItem("admin", data.is_staff);
-      } catch(err) {
-        if (err instanceof TypeError) {
+      } catch(err: unknown) {
+        if (err instanceof ReferenceError) {
           throw new Error("Failed to get username");
         }
       }

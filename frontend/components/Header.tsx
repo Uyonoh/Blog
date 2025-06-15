@@ -31,13 +31,13 @@ const Header = () => {
     router.push("/");
   };
 
-  // useEffect(() => {
-  //   const savedTheme = localStorage.getItem("theme");
-  //   if (savedTheme === "dark") {
-  //     setDarkMode(true);
-  //     document.documentElement.classList.add("dark");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      // setDarkMode(true);
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
 
   // const toggleDarkMode = () => {
   //   const newMode = !darkMode;
