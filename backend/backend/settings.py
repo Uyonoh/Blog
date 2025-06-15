@@ -33,15 +33,15 @@ SECRET_KEY = os.getenv("SECRETE_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", os.getenv("BLOG_HOST")]
 
 # Allow requests from the frontend
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+    os.getenv("BLOG_ORIGIN"),
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Next.js frontend
+    os.getenv("BLOG_ORIGIN"),  # Next.js frontend
 ]
 
 # Optional: allow credentials for session auth
@@ -112,7 +112,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://postgres:postgres@localhost:5432/blog',
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600
     )
 }
