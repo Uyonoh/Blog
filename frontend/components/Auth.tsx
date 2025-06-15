@@ -1,17 +1,10 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { APIROOT, authFetch } from "../utils/auth";
 
 type AuthProps = {
   register: boolean;
   onLoginSuccess: () => void; // This callback will be triggered on successful login
-};
-
-type DecodedToken = {
-  username: string;
-  user_id: number;
-  exp: number;
-  iat: number;
 };
 
 const getCSRFToken = async () => {
@@ -29,7 +22,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [password2, setPassword2] = useState("");
   const [username, setUsername] = useState(""); // Only for registration
   const [error, setError] = useState("");
-  const router = useRouter();
+  // const router = useRouter();
 
   
 
@@ -40,25 +33,11 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
     e.preventDefault();
     setError("");
 
-    const register = async (url: string, options: RequestInit) => {
-      const response = await fetch(url,{
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token ",
-      },
-      credentials: "include",
-    }
-  );
-    console.log("RESPON: ", response.text());
-    return response;
-  }
 
     const endpoint = isRegister ? "register" : "login"; // Determine endpoint
     const body = isRegister
       ? { username, email, password1, password2 }
       : { username, password };
-    const meth = isRegister? register : authFetch;
 
     try {
       const response = await fetch(
@@ -74,7 +53,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       );
 
       if (!response.ok) {
-        throw new Error(
+        throw new TypeError(
           isRegister ? "Registration failed" : "Invalid credentials"
         );
       }
@@ -91,9 +70,9 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
         localStorage.setItem("username", data.username);
         localStorage.setItem("admin", data.is_staff);
       } catch(err: unknown) {
-        // if (err typeof() string) {
+        if (err instanceof ReferenceError) {
           throw new Error("Failed to get username");
-        // }
+        }
       }
       // localStorage.setItem("username", decoded.username); // now stored for use in comments
 
@@ -102,8 +81,10 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       onLoginSuccess();
       // router.push("/");
       // router.reload();
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error) {
+      if (error instanceof TypeError) {
+        setError(error.message);
+      }
     }
   };
 

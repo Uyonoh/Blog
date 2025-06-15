@@ -28,12 +28,16 @@ class PostSerializer(serializers.ModelSerializer):
     summary = serializers.SerializerMethodField()
     author = serializers.SerializerMethodField()
     liked_by_user = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
     
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
         fields += ['summary', "slug"]
+
+    def get_image(self, obj):
+        return obj.image.url
 
     def get_likes_count(self, obj):
         return obj.likes.count()
