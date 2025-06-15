@@ -1,5 +1,5 @@
 
-const APIROOT = "http://localhost:8000"
+const APIROOT = process.env.NEXT_PUBLIC_API_ROOT;
 
 const authFetch = async (url: string, options: RequestInit = {}, media: string="") => {
   const token = localStorage.getItem("access_token") || "";
