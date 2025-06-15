@@ -33,7 +33,11 @@ SECRET_KEY = os.getenv("SECRETE_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", os.getenv("BLOG_HOST")]
+ALLOWED_HOSTS = ["127.0.0.1",
+    os.getenv("BLOG_HOST"),
+    os.getenv("API_HOST"),
+    ]
+
 
 # Allow requests from the frontend
 CSRF_TRUSTED_ORIGINS = [
