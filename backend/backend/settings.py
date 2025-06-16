@@ -31,21 +31,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = ["127.0.0.1",
-    os.getenv("BLOG_HOST"),
-    os.getenv("API_HOST"),
+if DEBUG:
+    ALLOWED_HOSTS = [
+        "127.0.0.1",
+        "localhost",
+        "10.0.2.15",
     ]
-
+    BLOG_ORIGIN = "http://localhost:3000"
+else:
+    ALLOWED_HOSTS = [
+        os.getenv("BLOG_HOST"),
+        os.getenv("API_HOST"),
+    ]
+    BLOG_ORIGIN = os.getenv("BLOG_ORIGIN")
 
 # Allow requests from the frontend
 CSRF_TRUSTED_ORIGINS = [
-    os.getenv("BLOG_ORIGIN"),
+    BLOG_ORIGIN,
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv("BLOG_ORIGIN"),  # Next.js frontend
+    BLOG_ORIGIN,  # Next.js frontend
 ]
 
 # Optional: allow credentials for session auth
@@ -211,25 +219,38 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
+CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
+CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")
+
+cloudinary.config(
+    cloud_name=CLOUDINARY_CLOUD_NAME,
+    api_key=CLOUDINARY_API_KEY,
+    api_secret=CLOUDINARY_API_SECRET
+)
+
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
     #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
-    CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
-    CLOUDINARY_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")
-
-    cloudinary.config(
-        cloud_name=CLOUDINARY_CLOUD_NAME,
-        api_key=CLOUDINARY_API_KEY,
-        api_secret=CLOUDINARY_API_SECRET
-    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN" # Default, but good to be explicit
+CSRF_COOKIE_SAMESITE = 'Lax' # Or 'None' if more strict cross-site sharing, but requires secure cookie
+
+# For production with cross-site cookies, CSRF_COOKIE_SECURE and CSRF_COOKIE_SAMESITE
+# are critical.
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True   # <--- CRITICAL: Must be True for SameSite='None'
+    CSRF_COOKIE_SAMESITE = 'None' # <--- CHANGE THIS: Allow cross-site sending
+
+    # Session settings for cross-site access
+    SESSION_COOKIE_SECURE = True   # <--- CRITICAL: Must be True for SameSite='None'
+    SESSION_COOKIE_SAMESITE = 'None' # <--- CHANGE THIS: Allow cross-site sending

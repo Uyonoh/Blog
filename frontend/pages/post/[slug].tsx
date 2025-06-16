@@ -54,7 +54,7 @@ const PostDetail = () => {
           }else {
             console.log(data.likes)
           }
-          console.log(username);  
+          // console.log(username);  
           setLoading(false);
         })
         .catch(() => setError("Failed to load post."));
@@ -64,11 +64,10 @@ const PostDetail = () => {
         .then((res) => res.json())
         .then((data) => setComments(data))
         .catch(() => {
-          console.log("POST: ", post);
           setError("Failed to load comments.");
         });
     }
-  }, [slug, post]);
+  }, [slug]);
 
 
   const handleCommentSubmit = async (author: string, content: string) => {
