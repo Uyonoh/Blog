@@ -1,4 +1,9 @@
 
+interface CsrfTokenResponse {
+  detail: string;
+  csrfToken: string;
+}
+
 const APIROOT = process.env.NEXT_PUBLIC_API_ROOT;
 
 const authFetch = async (url: string, options: RequestInit = {}, media: string="") => {
@@ -11,10 +16,31 @@ const authFetch = async (url: string, options: RequestInit = {}, media: string="
     };
   }
 
-  const getCookie = (name: string) => {
-    const value = `; ${document.cookie}`;
-    let parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift();
+//   const getCookie = (name: string) => {
+//     const value = `; ${document.cookie}`;
+//     let parts = value.split(`; ${name}=`);
+//     if (parts.length === 2) return parts.pop()?.split(';').shift();
+// }
+
+const getCsrfToken = async () => {
+  try {
+    response = await fetch(APIROOT + "/auth/csrf/", {
+      method: "GET",
+      credentials: "include"
+    });
+
+    if (!response.ok){
+      const errData = await response.json();
+      throw new TypeError(`Failed to fetch csrf token: ${response.status} - ${JSON.stringify(errData)}`);
+    }
+
+    const data:CsrfTokenResponse = await response.json();
+    return data.csrfToken;
+  } catch(err) {
+    if (err instanceof TypeError){
+      throw err;
+    }
+  }
 }
 
   const fetchWithToken = async (token: string, csrftoken: string) => {
@@ -30,7 +56,7 @@ const authFetch = async (url: string, options: RequestInit = {}, media: string="
     });
   };
 
-  const csrftoken = getCookie('csrftoken');
+  const csrftoken = await getCsrfToken() //getCookie('csrftoken');
   console.log("CSFR: ", csrftoken);
   let response = await fetchWithToken(token, csrftoken || "");
 

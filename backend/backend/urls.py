@@ -24,11 +24,15 @@ from .views import get_current_user
 
 
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from django.http import JsonResponse
     
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    return JsonResponse({'detail': 'CSRF cookie set'})
+    return JsonResponse({
+        'detail': 'CSRF cookie set',
+        'csrfToken': get_token(request),
+    })
 
 
 urlpatterns = [
