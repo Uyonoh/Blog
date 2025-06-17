@@ -53,8 +53,8 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def perform_create(self, serializer):
-        
-        serializer.save(author=self.request.user)
+        image = self.request.FILES.get("image")
+        serializer.save(author=self.request.user, image=image)
 
     
 
