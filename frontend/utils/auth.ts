@@ -24,7 +24,7 @@ const authFetch = async (url: string, options: RequestInit = {}, media: string="
 
 const getCsrfToken = async () => {
   try {
-    response = await fetch(APIROOT + "/auth/csrf/", {
+    const response = await fetch(APIROOT + "/auth/csrf/", {
       method: "GET",
       credentials: "include"
     });
@@ -57,7 +57,7 @@ const getCsrfToken = async () => {
   };
 
   const csrftoken = await getCsrfToken() //getCookie('csrftoken');
-  console.log("CSFR: ", csrftoken);
+  console.log("CSFR token: ", csrftoken);
   let response = await fetchWithToken(token, csrftoken || "");
 
   if (response.status === 401) {
