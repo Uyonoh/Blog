@@ -40,7 +40,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       : { username, password };
 
     try {
-      const response = await fetch(
+      const response = await authFetch(
         `${APIROOT}/auth/${endpoint}/`,
         {
           method: "POST",
