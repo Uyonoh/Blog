@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { APIROOT, authFetch } from "../../utils/auth";
+import { Topic } from "../../components/PostCard";
 
 function CreatePost() {
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
     const [image, setImage] = useState<string|Blob>("");
+    const [topicChoices, setTopicChoices] = useState<Topic[]>([]);
+    const [topics, setTopics] = useState<string>("");
     const router = useRouter()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,6 +19,18 @@ function CreatePost() {
     }
     };
 
+    useEffect(() => {
+        authFetch(APIROOT + "/api/topics", {
+
+        }).then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then((data) => {
+            setTopicChoices(data);
+        })
+    });
+
 
     async function handlesubmit(e: React.FormEvent) {
         e.preventDefault()
@@ -24,6 +39,7 @@ function CreatePost() {
         formData.append("title", title);
         formData.append("image", image);
         formData.append("content", content);
+        formData.append("topics", topics);
 
         const response = await authFetch(
             APIROOT + "/api/posts/", {
@@ -61,6 +77,15 @@ function CreatePost() {
                     <p className="text-gray-600 text-xs italic">
                         A fancy title for a viral blog
                     </p>
+                    <div>
+                    <label htmlFor="topics">Topics:</label>
+                    <select name="topics" id="topics" multiple
+                    onChange={(e) => {setTopics(e.target.value)}}>
+                        {topicChoices.map(topic => (
+                            <option key={topic.id} value={topic.id}>{topic.name}</option>
+                        ))}
+                    </select>
+                    </div>
                     </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-6">

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment, Like
+from .models import Post, Comment, Like, Topic
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
@@ -21,6 +21,11 @@ class LikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = ['id', 'post', 'user', 'created_at']
 
+class TopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ['id', 'name', 'slug', 'description']
+
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     likes = LikeSerializer(many=True, read_only=True)
@@ -29,12 +34,13 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     liked_by_user = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    topics = TopicSerializer(many=True, read_only=False)
     
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
-        fields += ['summary', "slug"]
+        fields += ['summary', 'slug', 'topics']
 
     def get_image(self, obj):
         return obj.image.url

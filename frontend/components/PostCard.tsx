@@ -19,6 +19,13 @@ export type Like = {
   user: string;
 };
 
+export type Topic = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+};
+
 export type Post = {
   id: number;       // or string, depending on your backend
   slug: string;
@@ -32,6 +39,7 @@ export type Post = {
   likes_count: number;
   liked_by_user: boolean;
   comments: Comment[];
+  topics: Topic[];
 };
 
 type PostCardProps = {
@@ -53,9 +61,12 @@ export const PostCard = ({ post }: PostCardProps) => {
       dates = dates.slice(1);
     }
     date = dates.join("-");
-
-    
+ 
     return date;
+  }
+
+  const parseTopics = (topics:Topic[]) => {
+    return topics.join(".");
   }
 
   return (
@@ -65,7 +76,7 @@ export const PostCard = ({ post }: PostCardProps) => {
     >
       <div className="flex justify-between bg-gray-100 p-4">
         <span className="text-gray-500 text-sm">{post.author}</span>
-        <span className="text-blue-500 text-sm">Topic</span>
+        <span className="text-blue-500 text-sm">{parseTopics(post.topics)}</span>
       </div>
       <div className="flex relative">
         <div className="p-6">
