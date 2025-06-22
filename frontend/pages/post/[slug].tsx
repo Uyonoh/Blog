@@ -3,33 +3,8 @@ import React, { useEffect, useState } from "react";
 import { APIROOT, authFetch } from "../../utils/auth";
 import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
+import {Post, Comment} from "../../components/PostCard";
 
-// Define types for Post and Comment
-type Comment = {
-  id: number;
-  author: string;
-  content: string;
-  created_at: string;
-};
-
-type Like = {
-  id: number;
-  user: string;
-};
-
-type Post = {
-  id: number;       // or string, depending on your backend
-  slug: string;
-  title: string;
-  image: string;
-  summary: string;
-  content: string;
-  author: string;
-  created_at: string;
-  likes: Like[];
-  likes_count: number;
-  liked_by_user: boolean;
-};
 
 const PostDetail = () => {
   const router = useRouter();
