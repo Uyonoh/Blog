@@ -44,9 +44,9 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
         `${APIROOT}/auth/${endpoint}/`,
         {
           method: "POST",
-          headers: {
-            "content-type": "application/json"
-          },
+          // headers: {
+          //   "content-type": "application/json"
+          // },
           body: JSON.stringify(body),
           credentials: "include"
         }

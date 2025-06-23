@@ -55,7 +55,7 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   const parseDate =  (date:string) => {
     date = date.split("T")[0];
-    var dates:string[] = date.split("-");
+    let dates:string[] = date.split("-");
     const today = new Date();
     if (dates[0] == today.getFullYear().toString()) {
       dates = dates.slice(1);
