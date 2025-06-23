@@ -87,6 +87,17 @@ const PostDetail = () => {
         </div>
       </div>
 
+      {/* Topic tags */}
+      <div className="max-w px-1">
+        {post.topics.map((topic, index) => {
+          return (
+            <span key={index} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded-md mr-2">
+              {topic.name}
+            </span>
+          );
+        })}
+      </div>
+
       {/* Post Title and Content */}
       <h1 className="text-5xl font-bold text-gray-900 dark:text-white leading-tight">
         {post.title}
