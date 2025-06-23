@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment, Like, Topic
+from .models import Post, Comment, Like, Topic, CloudinaryField
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
@@ -34,16 +34,24 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     liked_by_user = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
-    topics = TopicSerializer(many=True, read_only=False)
+    topics = TopicSerializer(many=True, read_only=True)
     
+    # Writeable field for receiving topic IDs from the frontend
+    topic_ids = serializers.PrimaryKeyRelatedField(
+        queryset=Topic.objects.all(), # Important: Limit to valid Topic objects
+        many=True,
+        write_only=True,
+        source='topics', # Map to the 'topics' ManyToManyField
+    )
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
-        fields += ['summary', 'slug', 'topics']
+        fields += ['summary', 'slug', 'topics', 'topic_ids']
 
     def get_image(self, obj):
-        return obj.image.url
+        if isinstance(obj, Post):
+            return obj.image.url
 
     def get_likes_count(self, obj):
         return obj.likes.count()
@@ -62,4 +70,7 @@ class PostSerializer(serializers.ModelSerializer):
     
     def get_author(self, obj):
         return obj.author.username
+    
+    # def get_topics(self, obj):
+    #     return obj.topics.all()
 

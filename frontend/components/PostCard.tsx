@@ -66,7 +66,11 @@ export const PostCard = ({ post }: PostCardProps) => {
   }
 
   const parseTopics = (topics:Topic[]) => {
-    return topics.join(".");
+    const names:string[] = topics.map((topic:Topic) => {;
+      return topic.name
+    });
+
+    return names.join(" | ")
   }
 
   return (

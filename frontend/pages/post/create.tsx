@@ -9,7 +9,7 @@ function CreatePost() {
     const [content, setContent] = useState<string>("");
     const [image, setImage] = useState<string|Blob>("");
     const [topicChoices, setTopicChoices] = useState<Topic[]>([]);
-    const [topics, setTopics] = useState<string>("");
+    const [selectedValues, setSelectedValues] = useState<string[]>([]);
     const router = useRouter()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,14 @@ function CreatePost() {
         }).then((data) => {
             setTopicChoices(data);
         })
-    });
+    }, []);
+
+    const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const values = Array.from(event.target.selectedOptions).map(
+        (option) => option.value
+      );
+      setSelectedValues(values);
+    };
 
 
     async function handlesubmit(e: React.FormEvent) {
@@ -39,7 +46,10 @@ function CreatePost() {
         formData.append("title", title);
         formData.append("image", image);
         formData.append("content", content);
-        formData.append("topics", topics);
+        console.log("Topics: ", selectedValues);
+        selectedValues.forEach( topic => {
+            formData.append("topic_ids", topic);
+        });
 
         const response = await authFetch(
             APIROOT + "/api/posts/", {
@@ -79,12 +89,20 @@ function CreatePost() {
                     </p>
                     <div>
                     <label htmlFor="topics">Topics:</label>
-                    <select name="topics" id="topics" multiple
-                    onChange={(e) => {setTopics(e.target.value)}}>
-                        {topicChoices.map(topic => (
+                    <select name="topics" id="topics" multiple size={2}
+                    onChange={handleSelect} value={selectedValues}>
+                        {topicChoices.map((topic) => (
                             <option key={topic.id} value={topic.id}>{topic.name}</option>
                         ))}
                     </select>
+                    <label htmlFor="cars">Choose a car:</label>
+                    <select name="cars" id="cars">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="opel">Opel</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                    
                     </div>
                     </div>
                 </div>
