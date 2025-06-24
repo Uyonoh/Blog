@@ -54,12 +54,6 @@ class PostViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         image = self.request.FILES.get("image")
-        print(self.request.POST)
-        print("===========================================")
-        for topic in self.request.POST.get("topic_ids"):
-            print(f"Topic: {topic}")
-        print("===========================================")
-        # raise TypeError("Image must be provided")
         serializer.save(author=self.request.user, image=image)
 
     
