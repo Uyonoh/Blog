@@ -1,5 +1,6 @@
+from django.conf import settings
 from rest_framework import serializers
-from .models import Post, Comment, Like, Topic, CloudinaryField
+from .models import Post, Comment, Like, Topic
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
@@ -51,7 +52,10 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if isinstance(obj, Post):
-            return obj.image.url
+            if settings.OFFLINE:
+                return "http://localhost:8000" + obj.image.url
+            else:
+                return obj.image.url
 
     def get_likes_count(self, obj):
         return obj.likes.count()

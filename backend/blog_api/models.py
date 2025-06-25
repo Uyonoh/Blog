@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from cloudinary.models import CloudinaryField
@@ -8,8 +9,10 @@ from cloudinary.models import CloudinaryField
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    #image = models.ImageField(upload_to="posts/")
-    image = CloudinaryField("image", folder="Posts")
+    if settings.OFFLINE:
+        image = models.ImageField(upload_to="posts/")
+    else:
+        image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
