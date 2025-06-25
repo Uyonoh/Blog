@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework import serializers
 from .models import Post, Comment, Like, Topic
+import markdown
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
@@ -42,13 +43,15 @@ class PostSerializer(serializers.ModelSerializer):
         queryset=Topic.objects.all(), # Important: Limit to valid Topic objects
         many=True,
         write_only=True,
-        source='topics', # Map to the 'topics' ManyToManyField
+        source='topics', # Map to the 'topics' ManyToManyField        
     )
+    html_content = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
-        fields += ['summary', 'slug', 'topics', 'topic_ids']
+        fields += ['summary', 'slug', 'topics', 'topic_ids', 'html_content']
+        read_only_fields = ['id', 'created_at', 'updated_at']
 
     def get_image(self, obj):
         if isinstance(obj, Post):
@@ -75,6 +78,11 @@ class PostSerializer(serializers.ModelSerializer):
     def get_author(self, obj):
         return obj.author.username
     
-    # def get_topics(self, obj):
-    #     return obj.topics.all()
-
+    def get_html_content(self, obj):
+        # Convert Markdown to HTML
+        # Using extensions for better rendering:
+        # 'fenced_code': for code blocks (```python ... ```)
+        # 'nl2br': for converting single newlines to <br> tags (like hitting Enter once)
+        # 'extra': for additional features like tables and footnotes
+        # , 'codehilite', 'admonition'
+        return markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'extra'])

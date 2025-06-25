@@ -40,6 +40,7 @@ export type Post = {
   liked_by_user: boolean;
   comments: Comment[];
   topics: Topic[];
+  html_content: string;
 };
 
 type PostCardProps = {

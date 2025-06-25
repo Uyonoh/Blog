@@ -4,6 +4,7 @@ import { APIROOT, authFetch } from "../../utils/auth";
 import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
 import {Post, Comment} from "../../components/PostCard";
+import SyntaxHighlighter from "../../components/SyntaxHighlighter";
 
 
 const PostDetail = () => {
@@ -105,9 +106,12 @@ const PostDetail = () => {
       <div>
         <img src={post.image} alt="Blog post Image"/>
       </div>
-      <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
+      {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
         {post.content}
-      </article>
+      </article> */}
+      {/* Render the HTML content using dangerouslySetInnerHTML */}
+      {/* Apply the 'prose' class for beautiful default styling */}
+      {post.html_content && <SyntaxHighlighter htmlContent={post.html_content} />}
 
       <hr className="my-10 border-gray-300 dark:border-gray-700" />
 
