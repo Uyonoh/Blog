@@ -3,8 +3,9 @@
 set -o errexit
 
 #pip install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 
