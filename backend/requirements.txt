@@ -42,6 +42,7 @@ jsonschema-specifications==2025.4.1
 jupyter-client==8.6.3
 jupyter-core==5.7.2
 jupyterlab-pygments==0.3.0
+markdown
 markupsafe==3.0.2
 matplotlib-inline==0.1.7
 mistune==3.1.3
