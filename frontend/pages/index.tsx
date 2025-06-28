@@ -30,7 +30,7 @@ const IndexPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-5xl font-bold text-center text-gray-800 mb-8 text-blue-600">Blog Posts</h1>
+      <h1 className="text-5xl font-bold text-center text-gray-800 dark:text-gray-200 mb-8 text-blue-600">Blog Posts</h1>
       {error && <div className="text-red-500 text-center mb-4">{error}</div>}  {/* Error message */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.length === 0 ? (

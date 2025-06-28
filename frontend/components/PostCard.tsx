@@ -76,23 +76,23 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   return (
     <div
-      className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="bg-white dark:bg-inherit shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
       onClick={handleClick}
     >
-      <div className="flex justify-between bg-gray-100 p-4">
-        <span className="text-gray-500 text-sm">{post.author}</span>
-        <span className="text-blue-500 text-sm">{parseTopics(post.topics)}</span>
+      <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4">
+        <span className="text-gray-500 dark:text-gray-100 text-sm">{post.author}</span>
+        <span className="text-blue-500 dark:text-yellow-500 text-sm">{parseTopics(post.topics)}</span>
       </div>
       <div className="flex relative">
         <div className="p-6">
-          <h2 className="text-2xl font-semibold text-gray-800">{post.title}</h2>
-          <p className="text-gray-600 mt-4">{post.summary || post.content }</p>
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-300">{post.title}</h2>
+          <p className="text-gray-600 dark:text-white mt-4">{post.summary || post.content }</p>
         </div>
-        <img src={post.image} alt="Image" className="absolute bottom-0 right-0 w-25 h-25 object-cover rounded-t-lg" />
+        <img src={post.image} alt="Image" className="absolute bottom-0 right-0 w-25 h-25 object-cover rounded-t-lg dark:text-gray-300" />
       </div>
-      <div className="flex justify-between bg-gray-100 p-4">
-        <span className="text-gray-500 text-sm">{parseDate(post.created_at)}</span>
-        <span className="text-gray-500 text-sm">Likes: {post.likes_count}</span>
+      <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4 text-gray-500 dark:text-gray-100">
+        <span className="text-sm">{parseDate(post.created_at)}</span>
+        <span className="text-sm">Likes: {post.likes_count}</span>
       </div>
     </div>
   );

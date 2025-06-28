@@ -100,7 +100,7 @@ const PostDetail = () => {
       </div>
 
       {/* Post Title and Content */}
-      <h1 className="text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+      <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-200 leading-tight">
         {post.title}
       </h1>
       <div>

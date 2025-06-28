@@ -25,7 +25,7 @@ const SyntaxHighlighter = ({ htmlContent }: { htmlContent: string }) => {
 
   return (
     <div
-      className="prose prose-lg max-w-none text-gray-800 leading-relaxed"
+      className="prose prose-lg max-w-none text-gray-800 dark:text-gray-300 leading-relaxed"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );
