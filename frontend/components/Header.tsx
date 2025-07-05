@@ -59,7 +59,7 @@ const Header = () => {
       </Link>
 
       <div className="flex lg:hidden">
-        <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+        <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white"
         onClick={toggleMenu}>
           <span className="sr-only">Open main menu</span>
           <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -68,16 +68,16 @@ const Header = () => {
         </button>
       </div>
 
-      <nav className="hidden lg:flex space-x-6">
+      <nav className="hidden lg:flex space-x-6 text-gray-700 dark:text-gray-300 *:hover:text-blue-500">
         <Link
           href="/about"
-          className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
+          // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
         >
           About
         </Link>
         <Link
           href="/contact"
-          className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
+          // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
         >
           Contact
         </Link>
@@ -85,7 +85,7 @@ const Header = () => {
         { isAdmin && (
           <Link
             href="/post/create/"
-            className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
+            // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
           >
             Create
           </Link>
@@ -144,7 +144,7 @@ const Header = () => {
       <div id="mobile-menu" className="hidden" role="dialog" aria-modal="true">
         {/* Background backdrop */}
         <div className="fixed inset-0 z-50"></div>
-        <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <Link href="/" onClick={toggleMenu}>
               <h1 className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer">
@@ -153,7 +153,7 @@ const Header = () => {
             </Link>
 
             {/* Replace with component */}
-            <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700"
+            <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-white"
             onClick={toggleMenu}>
               <span className="sr-only">Close menu</span>
               <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
@@ -162,13 +162,13 @@ const Header = () => {
           </button>
           </div>
 
-          <div className="mt-6 flow-root">
+          <div className="mt-6 flow-root text-gray-700 dark:text-white hover:text-blue-500">
             <div className="-my6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                <div className="-mx-3">
+                <div className="-mx-3 *:dark:text-white *:dark:hover:bg-gray-500 first:hover:none">
 
                   {isAuthenticated ? (
-                    <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900">
+                    <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:none *:dark:hover:bg-gray-500">
                       <Link href="/profile" className="hover:bg-gray-50 w-full" aria-controls="disclosure-1" aria-expanded="false"
                       onClick={toggleMenu}>
                         Profile
@@ -180,7 +180,7 @@ const Header = () => {
                       </button>
                     </div>
                   ): (
-                    <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900">
+                    <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 *:dark:hover:bg-gray-500">
                       <button className="hover:bg-gray-50 w-full" aria-controls="disclosure-1" aria-expanded="false"
                       onClick={() => {
                         toggleMenu();

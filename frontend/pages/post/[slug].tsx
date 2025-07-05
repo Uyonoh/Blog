@@ -111,7 +111,8 @@ const PostDetail = () => {
       </article> */}
       {/* Render the HTML content using dangerouslySetInnerHTML */}
       {/* Apply the 'prose' class for beautiful default styling */}
-      {post.html_content && <SyntaxHighlighter htmlContent={post.html_content} />}
+      {post.html_content && <SyntaxHighlighter htmlContent={post.html_content}
+      mode={localStorage.getItem("theme")} />}
 
       <hr className="my-10 border-gray-300 dark:border-gray-700" />
 

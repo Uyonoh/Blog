@@ -17,15 +17,44 @@ import 'prismjs/components/prism-bash';
 // import 'prismjs/components/prism-css';
 // import 'prismjs/components/prism-json';
 
-const SyntaxHighlighter = ({ htmlContent }: { htmlContent: string }) => {
+export const loadPrismTheme = async () => {
+  const isDark = localStorage.getItem('theme') === 'dark' ? true : false;
+  console.log("Dark: ", isDark);
+  if (isDark) {
+    await import('prismjs/themes/prism-tomorrow.css');
+  } else {
+    await import('prismjs/themes/prism.css');
+  }
+}
+
+function setPrismTheme(mode: string | null) {
+  const themeLink = document.getElementById('prism-theme');
+  console.log(themeLink);
+  if (!themeLink) return;
+
+  if (themeLink instanceof HTMLLinkElement){
+    if (mode === 'dark') {
+      themeLink.href = '/themes/prism-tomorrow.css';
+    } else {
+      themeLink.href = '/themes/prism.css';
+    }
+  }
+}
+
+const SyntaxHighlighter = ({ htmlContent, mode }: { htmlContent:string, mode:string|null }) => {
+  // const mode = localStorage.getItem('theme');
   useEffect(() => {
     // Highlight all code blocks after the component mounts and content is rendered
+    // loadPrismTheme().then(() => {
+    //   Prism.highlightAll();
+    // });
+    setPrismTheme(mode);
     Prism.highlightAll();
-  }, [htmlContent]); // Re-run effect if htmlContent changes
+  }, [htmlContent, mode]); // Re-run effect if htmlContent changes
 
   return (
     <div
-      className="prose prose-lg max-w-none text-gray-800 dark:text-gray-300 leading-relaxed"
+      className="prose prose-lg max-w-none prose-gray  dark:prose-invert leading-relaxed"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );

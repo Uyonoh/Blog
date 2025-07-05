@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sun, Moon } from "lucide-react";
+import { loadPrismTheme } from './SyntaxHighlighter';
+import Prism from 'prismjs';
 
 export default function DarkModeToggle() {
   const [darkMode, setDarkMode] = useState(false);
@@ -21,6 +23,10 @@ export default function DarkModeToggle() {
       localStorage.setItem('theme', 'dark');
     }
     setDarkMode(!darkMode);
+    // loadPrismTheme().then(() => {
+    //   // Prism.highlightAll();
+    //   console.log("Gigh");
+    // });
   };
 
   return (
