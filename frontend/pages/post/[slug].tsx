@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Head from 'next/head';
 import { APIROOT, authFetch } from "../../utils/auth";
 import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
@@ -74,95 +75,104 @@ const PostDetail = () => {
   if (!post) return <div className="text-center mt-10 text-red-500">Post not found.</div>;
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12">
-      {/* Author and Post Meta */}
-      <div className="flex items-center space-x-3 mb-6">
-        <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-        <div>
-          <p className="text-gray-800 dark:text-white font-semibold">
-            {post.author}
-          </p>
-          <p className="text-gray-500 text-sm">
-            {new Date(post.created_at).toDateString()}
-          </p>
-        </div>
-      </div>
+    <>
+      <Head>
+        <title>{post.title} | {post.author}&apos;</title>
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.summary} />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary" />
 
-      {/* Topic tags */}
-      <div className="max-w px-1">
-        {post.topics.map((topic, index) => {
-          return (
-            <span key={index} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded-md mr-2">
-              {topic.name}
-            </span>
-          );
-        })}
-      </div>
-
-      {/* Post Title and Content */}
-      <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-200 leading-tight">
-        {post.title}
-      </h1>
-      <div>
-        <img src={post.image} alt="Blog post Image"/>
-      </div>
-      {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
-        {post.content}
-      </article> */}
-      {/* Render the HTML content using dangerouslySetInnerHTML */}
-      {/* Apply the 'prose' class for beautiful default styling */}
-      {post.html_content && <SyntaxHighlighter htmlContent={post.html_content}
-      mode={localStorage.getItem("theme")} />}
-
-      <hr className="my-10 border-gray-300 dark:border-gray-700" />
-
-      <LikeButton
-        slug={post.slug}
-        initialLikes={post.likes_count}
-        initialLiked={liked}
-      />
-
-      <hr className="my-10 border-gray-300 dark:border-gray-700" />
-
-      {/* Comments Section */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
-          Comments
-        </h2>
-
-        {/* Display Error Message */}
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
-
-        {/* Comment Form */}
-        <CommentForm onSubmit={handleCommentSubmit} />
-
-        {/* Comment List */}
-        <div className="mt-6 space-y-6">
-          {comments.length === 0 ? (
-            <p className="text-gray-500 dark:text-gray-400">
-              No comments yet. Be the first to comment!
+      </Head>
+      <div className="max-w-2xl mx-auto px-6 py-12">
+        {/* Author and Post Meta */}
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+          <div>
+            <p className="text-gray-800 dark:text-white font-semibold">
+              {post.author}
             </p>
-          ) : (
-            comments.map((comment) => (
-              <div
-                key={comment.id}
-                className="border border-gray-300 dark:border-gray-700 p-4 rounded-lg"
-              >
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  {comment.author}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  {comment.content}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {new Date(comment.created_at).toLocaleString()}
-                </p>
-              </div>
-            ))
-          )}
+            <p className="text-gray-500 text-sm">
+              {new Date(post.created_at).toDateString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Topic tags */}
+        <div className="max-w px-1">
+          {post.topics.map((topic, index) => {
+            return (
+              <span key={index} className="bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 px-2 py-1 rounded-md mr-2">
+                {topic.name}
+              </span>
+            );
+          })}
+        </div>
+
+        {/* Post Title and Content */}
+        <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-200 leading-tight">
+          {post.title}
+        </h1>
+        <div>
+          <img src={post.image} alt="Blog post Image"/>
+        </div>
+        {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
+          {post.content}
+        </article> */}
+        {/* Render the HTML content using dangerouslySetInnerHTML */}
+        {/* Apply the 'prose' class for beautiful default styling */}
+        {post.html_content && <SyntaxHighlighter htmlContent={post.html_content} />}
+
+        <hr className="my-10 border-gray-300 dark:border-gray-700" />
+
+        <LikeButton
+          slug={post.slug}
+          initialLikes={post.likes_count}
+          initialLiked={liked}
+        />
+
+        <hr className="my-10 border-gray-300 dark:border-gray-700" />
+
+        {/* Comments Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-4">
+            Comments
+          </h2>
+
+          {/* Display Error Message */}
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+          {/* Comment Form */}
+          <CommentForm onSubmit={handleCommentSubmit} />
+
+          {/* Comment List */}
+          <div className="mt-6 space-y-6">
+            {comments.length === 0 ? (
+              <p className="text-gray-500 dark:text-gray-400">
+                No comments yet. Be the first to comment!
+              </p>
+            ) : (
+              comments.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="border border-gray-300 dark:border-gray-700 p-4 rounded-lg"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {comment.author}
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300">
+                    {comment.content}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(comment.created_at).toLocaleString()}
+                  </p>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

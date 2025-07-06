@@ -17,40 +17,25 @@ import 'prismjs/components/prism-bash';
 // import 'prismjs/components/prism-css';
 // import 'prismjs/components/prism-json';
 
-export const loadPrismTheme = async () => {
-  const isDark = localStorage.getItem('theme') === 'dark' ? true : false;
-  console.log("Dark: ", isDark);
-  if (isDark) {
-    await import('prismjs/themes/prism-tomorrow.css');
-  } else {
-    await import('prismjs/themes/prism.css');
-  }
-}
-
-function setPrismTheme(mode: string | null) {
+export function setPrismTheme(mode: string | null) {
   const themeLink = document.getElementById('prism-theme');
-  console.log(themeLink);
+  console.log("THEME: ", themeLink);
   if (!themeLink) return;
 
   if (themeLink instanceof HTMLLinkElement){
     if (mode === 'dark') {
-      themeLink.href = '/themes/prism-tomorrow.css';
+      themeLink.href = '/prism-themes/prism-tomorrow.css';
     } else {
-      themeLink.href = '/themes/prism.css';
+      themeLink.href = '/prism-themes/prism.css';
     }
   }
 }
 
-const SyntaxHighlighter = ({ htmlContent, mode }: { htmlContent:string, mode:string|null }) => {
-  // const mode = localStorage.getItem('theme');
+const SyntaxHighlighter = ({ htmlContent}: { htmlContent:string }) => {
   useEffect(() => {
-    // Highlight all code blocks after the component mounts and content is rendered
-    // loadPrismTheme().then(() => {
-    //   Prism.highlightAll();
-    // });
-    setPrismTheme(mode);
+    setPrismTheme(localStorage.getItem('theme'));
     Prism.highlightAll();
-  }, [htmlContent, mode]); // Re-run effect if htmlContent changes
+  }, [htmlContent]); // Re-run effect if htmlContent changes
 
   return (
     <div

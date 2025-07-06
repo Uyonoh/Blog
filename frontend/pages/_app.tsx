@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 import { useEffect } from "react";
 import type { AppProps } from "next/app";
+import Head from 'next/head';
 import Layout from "../components/Layout"; // Import the Layout
-// import 'prismjs/themes/prism.css';
+import { ThemeProvider } from "../components/ThemeContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -12,9 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     link.id = 'prism-theme'
 
     if (theme === 'dark') {
-      link.href = '/prism-dark.css'
+      link.href = '/prism-themes/prism-tomorrow.css'
     } else {
-      link.href = '/prism-light.css'
+      link.href = '/prism-themes/prism.css'
     }
 
     document.head.appendChild(link)
@@ -26,9 +27,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <ThemeProvider>
+      <Head>
+        <title>Uyonoh&apos;s Blog</title>
+        <meta name="description" content="Uyonoh&apos;s Blog" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </ThemeProvider>
   );
 }
 
