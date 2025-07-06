@@ -67,7 +67,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       try {
         const response = await authFetch(APIROOT + "/auth/user/");
         const data = await response.json();
-        localStorage.setItem("username", data.username);
+        localStorage.setItem("user", data.id);
         localStorage.setItem("admin", data.is_staff);
       } catch(err: unknown) {
         if (err instanceof ReferenceError) {

@@ -6,36 +6,28 @@ import CommentForm from "../../components/CommentForm";
 import LikeButton from "../../components/LikeButton";
 import {Post, Comment} from "../../components/PostCard";
 import SyntaxHighlighter from "../../components/SyntaxHighlighter";
+import Prism from 'prismjs';
+import { GetStaticPaths, GetStaticProps } from "next";
 
 
-const PostDetail = () => {
-  const router = useRouter();
-  const { slug } = router.query;
-  const [post, setPost] = useState<Post | null>(null);
+type Props = {
+  post: Post;
+};
+
+export default function PostDetail({ post }: Props) {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const slug = post.slug;
   const [error, setError] = useState<string>("");
-  const [liked, setLiked] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      Prism.highlightAll();
+    }, 500);
+  }, []);
 
 
   useEffect(() => {
     if (slug) {
-      // Fetch the post details
-      fetch(`${APIROOT}/api/posts/${slug}`)
-        .then((response) => response.json())
-        .then((data: Post) => {
-          setPost(data);
-          const username = localStorage.getItem("username");
-          if (username && data.likes.find( item => item.user === username)) {
-            setLiked(true);
-          }else {
-            console.log(data.likes)
-          }
-          // console.log(username);  
-          setLoading(false);
-        })
-        .catch(() => setError("Failed to load post."));
-
       // Fetch the comments for the post
       fetch(`${APIROOT}/api/posts/${slug}/comments/`)
         .then((res) => res.json())
@@ -44,7 +36,7 @@ const PostDetail = () => {
           setError("Failed to load comments.");
         });
     }
-  }, [slug]);
+  }, [slug, post]);
 
 
   const handleCommentSubmit = async (author: string, content: string) => {
@@ -71,7 +63,7 @@ const PostDetail = () => {
   }
  
 
-  if (loading) return <div className="text-center mt-10 text-gray-600 dark:text-gray-300">Loading...</div>;
+  // if (loading) return <div className="text-center mt-10 text-gray-600 dark:text-gray-300">Loading...</div>;
   if (!post) return <div className="text-center mt-10 text-red-500">Post not found.</div>;
 
   return (
@@ -128,7 +120,7 @@ const PostDetail = () => {
         <LikeButton
           slug={post.slug}
           initialLikes={post.likes_count}
-          initialLiked={liked}
+          postLikes={post.likes}
         />
 
         <hr className="my-10 border-gray-300 dark:border-gray-700" />
@@ -176,4 +168,31 @@ const PostDetail = () => {
   );
 };
 
-export default PostDetail;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const res = await fetch(APIROOT + "/api/posts/");
+  const posts: Post[] = await res.json();
+
+  return {
+    paths: posts.map((post) => ({
+      params: { slug: post.slug },
+    })),
+    fallback: false,
+  };
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // Replace this with your actual fetch logic
+  const slug = params?.slug as string;
+  const res = await fetch(`${APIROOT}/api/posts/${slug}/`);
+  if (res.status !== 200) return { notFound: true };
+
+  const post: Post = await res.json();
+
+  return {
+    props: {
+      post,
+    },
+  };
+}
+
+

@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {APIROOT, authFetch} from "../utils/auth";
+import { Like } from "./PostCard";
 
 type LikeButtonProps = {
   slug: string;
   initialLikes: number;
-  initialLiked: boolean;
+  postLikes: Like[];
 };
 
-export default function LikeButton({ slug: slug, initialLikes, initialLiked }: LikeButtonProps) {
+export default function LikeButton({ slug: slug, initialLikes, postLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
-  const [liked, setLiked] = useState(initialLiked);
+  const [liked, setLiked] = useState(false);
   console.log("Like" + liked);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (user && postLikes.find((item) => item.user == user)) {
+      setLiked(true);
+    } else {
+      console.log("likes: ", postLikes);
+    }
+  }, [postLikes]);
 
   const handleLike = async () => {
     try {
