@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import { useEffect } from "react";
 import type { AppProps } from "next/app";
 import Head from 'next/head';
+import Script from "next/script";
 import Layout from "../components/Layout"; // Import the Layout
 import { ThemeProvider } from "../components/ThemeContext";
 
@@ -36,6 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <Layout>
         <Component {...pageProps} />
+        <Script src="/prism-themes/prism-tomorrow.js" ></Script>
       </Layout>
     </ThemeProvider>
   );
