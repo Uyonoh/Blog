@@ -11,10 +11,11 @@ import { GetStaticPaths, GetStaticProps } from "next";
 
 type Props = {
   post: Post;
+  postComments: Comment[];
 };
 
-export default function PostDetail({ post }: Props) {
-  const [comments, setComments] = useState<Comment[]>([]);
+export default function PostDetail({ post, postComments }: Props) {
+  const [comments, setComments] = useState<Comment[]>(postComments);
   const slug = post.slug;
   const [error, setError] = useState<string>("");
 
@@ -23,20 +24,6 @@ export default function PostDetail({ post }: Props) {
       Prism.highlightAll();
     }, 500);
   }, []);
-
-
-  useEffect(() => {
-    if (slug) {
-      // Fetch the comments for the post
-      fetch(`${APIROOT}/api/posts/${slug}/comments/`)
-        .then((res) => res.json())
-        .then((data) => setComments(data))
-        .catch(() => {
-          setError("Failed to load comments.");
-        });
-    }
-  }, [slug, post]);
-
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {
@@ -182,14 +169,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   // Replace this with your actual fetch logic
   const slug = params?.slug as string;
-  const res = await fetch(`${APIROOT}/api/posts/${slug}/`);
-  if (res.status !== 200) return { notFound: true };
 
+  let res = await fetch(`${APIROOT}/api/posts/${slug}/`);
+  if (res.status !== 200) return { notFound: true };
   const post: Post = await res.json();
+
+  res = await fetch(`${APIROOT}/api/posts/${slug}/comments/`);
+  if (res.status !== 200) return { notFound: true };
+  const postComments: Comment[] = await res.json();
 
   return {
     props: {
       post,
+      postComments,
     },
   };
 }
