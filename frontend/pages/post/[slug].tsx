@@ -162,7 +162,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: posts.map((post) => ({
       params: { slug: post.slug },
     })),
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -171,11 +171,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params?.slug as string;
 
   let res = await fetch(`${APIROOT}/api/posts/${slug}/`);
-  if (res.status !== 200) return { notFound: true };
+  if (!res.ok) {
+    const errorText = await res.text(); // still try to read it
+    throw new Error(`Fetch failed: ${res.status} ${errorText}`);
+  }
   const post: Post = await res.json();
 
   res = await fetch(`${APIROOT}/api/posts/${slug}/comments/`);
-  if (res.status !== 200) return { notFound: true };
+  if (!res.ok) {
+    const errorText = await res.text(); // still try to read it
+    throw new Error(`Fetch failed: ${res.status} ${errorText}`);
+  }
   const postComments: Comment[] = await res.json();
 
   return {
