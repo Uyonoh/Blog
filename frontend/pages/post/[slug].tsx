@@ -16,7 +16,6 @@ type Props = {
 
 export default function PostDetail({ post, postComments }: Props) {
   const [comments, setComments] = useState<Comment[]>(postComments);
-  const slug = post.slug;
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -27,7 +26,7 @@ export default function PostDetail({ post, postComments }: Props) {
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {
-      const response = await authFetch(`${APIROOT}/api/posts/${slug}/comments/`, {
+      const response = await authFetch(`${APIROOT}/api/posts/${post.slug}/comments/`, {
         method: "POST",
         body: JSON.stringify({ content }),
       });
@@ -214,7 +213,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         post,
         postComments,
       },
-      revalidate: 60, // optional ISR: re-generate every 60s
     };
 
   } catch (err) {
