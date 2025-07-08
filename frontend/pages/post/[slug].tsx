@@ -154,15 +154,25 @@ export default function PostDetail({ post, postComments }: Props) {
   );
 };
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(APIROOT + "/api/posts/");
   const posts: Post[] = await res.json();
 
+  const paths = [];
+
+  for (const post of posts) {
+    paths.push({params: {slug: post.slug}});
+    await delay(200);
+  }
+
   return {
-    paths: posts.map((post) => ({
-      params: { slug: post.slug },
-    })),
-    fallback: true,
+    paths,
+    fallback: false,
   };
 }
 
@@ -171,17 +181,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params?.slug as string;
 
   let res = await fetch(`${APIROOT}/api/posts/${slug}/`);
-  if (!res.ok) {
-    const errorText = await res.text(); // still try to read it
-    throw new Error(`Fetch failed: ${res.status} ${errorText}`);
-  }
+  if (res.status !== 200) return { notFound: true };
   const post: Post = await res.json();
 
   res = await fetch(`${APIROOT}/api/posts/${slug}/comments/`);
-  if (!res.ok) {
-    const errorText = await res.text(); // still try to read it
-    throw new Error(`Fetch failed: ${res.status} ${errorText}`);
-  }
+  if (res.status !== 200) return { notFound: true };
   const postComments: Comment[] = await res.json();
 
   return {
