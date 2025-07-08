@@ -161,39 +161,64 @@ function delay(ms: number) {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const res = await fetch(APIROOT + "/api/posts/");
+
+  if (!res.ok) {
+    console.error("Failed to fetch posts in getStaticPaths:", res.status);
+    return {
+      paths: [],
+      fallback: true, // fallback allows runtime rendering
+    };
+  }
+
   const posts: Post[] = await res.json();
 
-  const paths = [];
+  const paths = posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
 
-  for (const post of posts) {
-    paths.push({params: {slug: post.slug}});
-    await delay(200);
+  // optional delay to avoid rate limiting
+  for (let i = 0; i < paths.length; i++) {
+    await delay(100); // can reduce or remove this if unnecessary
   }
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
-}
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // Replace this with your actual fetch logic
   const slug = params?.slug as string;
 
-  let res = await fetch(`${APIROOT}/api/posts/${slug}/`);
-  if (res.status !== 200) return { notFound: true };
-  const post: Post = await res.json();
+  try {
+    const resPost = await fetch(`${APIROOT}/api/posts/${slug}/`);
 
-  res = await fetch(`${APIROOT}/api/posts/${slug}/comments/`);
-  if (res.status !== 200) return { notFound: true };
-  const postComments: Comment[] = await res.json();
+    if (!resPost.ok) {
+      console.error("Failed to fetch post:", resPost.status);
+      return { notFound: true };
+    }
 
-  return {
-    props: {
-      post,
-      postComments,
-    },
-  };
-}
+    const post: Post = await resPost.json();
 
+    const resComments = await fetch(`${APIROOT}/api/posts/${slug}/comments/`);
 
+    if (!resComments.ok) {
+      console.error("Failed to fetch comments:", resComments.status);
+      return { notFound: true };
+    }
+
+    const postComments: Comment[] = await resComments.json();
+
+    return {
+      props: {
+        post,
+        postComments,
+      },
+      revalidate: 60, // optional ISR: re-generate every 60s
+    };
+
+  } catch (err) {
+    console.error("Error in getStaticProps:", err);
+    return { notFound: true };
+  }
+};
