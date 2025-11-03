@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import Layout from "@/components/Layout";
+import { ThemeProvider } from "../components/ThemeContext";
+import { Suspense } from "react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,14 +28,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Layout>
-          {children}
-          </Layout>
-      </body>
-    </html>
+    <Suspense fallback={
+      <div>Loading...</div>
+    }>
+      <ThemeProvider>
+        <html lang="en">
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            <Layout>{children}</Layout>
+            <Script src="/prism-themes/prism-tomorrow.js" ></Script>
+          </body>
+        </html>
+      </ThemeProvider>
+    </Suspense>
   );
 }

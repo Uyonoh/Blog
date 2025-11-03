@@ -45,22 +45,21 @@ if DEBUG:
         "localhost",
         "10.0.2.15",
     ]
-    BLOG_ORIGIN = "http://localhost:3000"
+    BLOG_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        ]
 else:
     ALLOWED_HOSTS = [
         os.getenv("BLOG_HOST"),
         os.getenv("API_HOST"),
     ]
-    BLOG_ORIGIN = os.getenv("BLOG_ORIGIN")
+    BLOG_ORIGINS = [os.getenv("BLOG_ORIGIN")]
 
 # Allow requests from the frontend
-CSRF_TRUSTED_ORIGINS = [
-    BLOG_ORIGIN,
-]
+CSRF_TRUSTED_ORIGINS = BLOG_ORIGINS
 
-CORS_ALLOWED_ORIGINS = [
-    BLOG_ORIGIN,  # Next.js frontend
-]
+CORS_ALLOWED_ORIGINS = BLOG_ORIGINS
 
 # Optional: allow credentials for session auth
 CORS_ALLOW_CREDENTIALS = True

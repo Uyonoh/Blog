@@ -20,6 +20,23 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const storedTheme = localStorage.getItem("theme") as Theme;
         if (storedTheme) setTheme(storedTheme);
+
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.id = 'prism-theme'
+
+        if (theme === 'dark') {
+        link.href = '/prism-themes/prism-tomorrow.css'
+        } else {
+        link.href = '/prism-themes/prism.css'
+        }
+
+        document.head.appendChild(link)
+
+        return () => {
+        const existing = document.getElementById('prism-theme')
+        if (existing) existing.remove()
+        }
     }, []);
 
     useEffect(() => {
