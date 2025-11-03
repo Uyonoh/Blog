@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Header from "./Header";
 import DarkModeToggle from "./DarkModeToggle";
 
@@ -12,10 +13,16 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <main className="flex-1">{children}</main>
       <div
-      className="flex lg:hidden"
-      style={{boxShadow: 'none', zIndex: 2147483647, position: 'fixed', bottom: 10 + 'px', right: 10 + 'px'}}
+        className="flex lg:hidden"
+        style={{
+          boxShadow: "none",
+          zIndex: 2147483647,
+          position: "fixed",
+          bottom: 10 + "px",
+          right: 10 + "px",
+        }}
       >
-        <DarkModeToggle  />
+        <DarkModeToggle />
       </div>
     </div>
   );

@@ -1,22 +1,9 @@
-export default function Loading() {
-  return (
-    <div className="container mx-auto px-4 py-8 animate-pulse">
-      <h1 className="text-5xl font-bold text-center text-gray-700 dark:text-gray-200 mb-8">
-        Loading posts...
-      </h1>
+"use client";
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              height: "30vh",
-              borderRadius: "10px",
-            }}
-            className="bg-gray-200 dark:bg-gray-700"
-          >{""}</div>
-        ))}
-      </div>
+export default function GlobalLoading() {
+  return (
+    <div className="flex items-center justify-center h-screen w-full">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-gray-900 dark:border-gray-200" />
     </div>
   );
 }
