@@ -91,7 +91,7 @@ export default function PostDetail({ post, postComments }: Props) {
         </div>
 
         {/* Post Title and Content */}
-        <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-200 leading-tight">
+        <h1 className="text-2xl pt-5 font-bold text-gray-900 dark:text-gray-200 leading-tight">
           {post.title}
         </h1>
         <div className="pt-5 pb-10">
