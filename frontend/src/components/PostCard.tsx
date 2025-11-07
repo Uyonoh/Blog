@@ -81,6 +81,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       className="bg-white dark:bg-inherit shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
       onClick={handleClick}
     >
+      {/* card head */}
       <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4">
         <span className="text-gray-500 dark:text-gray-100 text-sm">
           {post.author}
@@ -89,18 +90,21 @@ export const PostCard = ({ post }: PostCardProps) => {
           {parseTopics(post.topics)}
         </span>
       </div>
-      <div className="flex items-center relative h-35 w-full mt-2 overflow-hidden">
-        <div className="p-6 pr-30">
-          <h2 className="w-auto text-2xl font-semibold text-gray-800 dark:text-gray-300">
-            {post.title}
-          </h2>
-          {/* <p className="text-gray-600 dark:text-white mt-4">{post.summary || post.content }</p> */}
-        </div>
+
+      {/* main body */}
+      <div className="flex flex-col align-center justify-start relative h-82 w-full mt-2 overflow-hidden">
         <img
           src={post.image}
           alt="Image"
-          className="absolute bottom-1 right-1 w-25 h-25 object-cover rounded-lg dark:text-gray-300"
+          className="w-full h-45 object-cover rounded-b-lg dark:text-gray-300"
         />
+        <div className="p-2">
+          <h2 className="w-auto text-xl font-semibold text-gray-800 dark:text-gray-300">
+            {post.title}
+          </h2>
+          <p className="text-gray-600 dark:text-white mt-4">{post.summary || post.content }</p>
+        </div>
+        
       </div>
       <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4 text-gray-500 dark:text-gray-100">
         <span className="text-sm">{parseDate(post.created_at)}</span>

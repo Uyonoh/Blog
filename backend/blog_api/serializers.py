@@ -72,7 +72,7 @@ class PostSerializer(serializers.ModelSerializer):
     
     def get_summary(self, obj):
         if len(obj.content) > 35:
-            return obj.content[:32] + '...'    
+            return obj.content[:100] + '...'    
         return obj.content
     
     def get_author(self, obj):
