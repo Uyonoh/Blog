@@ -1,5 +1,7 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Head from 'next/head';
 import { APIROOT, authFetch } from "@/utils/auth";
@@ -12,6 +14,9 @@ import Prism from 'prismjs';
 import { GetStaticPaths, GetStaticProps } from "next";
 import path from "path";
 
+// Styles
+import "@/styles/posts.css";
+
 
 type Props = {
   post: Post;
@@ -21,10 +26,12 @@ type Props = {
 export default function PostDetail({ post, postComments }: Props) {
   const [comments, setComments] = useState<Comment[]>(postComments);
   const [error, setError] = useState<string>("");
+  const dev = !!process.env.NEXT_PUBLIC_DEV || false;
 
   useEffect(() => {
     setTimeout(() => {
       Prism.highlightAll();
+      console.log("URL:", post.image);
     }, 500);
 
   }, []);
@@ -58,7 +65,7 @@ export default function PostDetail({ post, postComments }: Props) {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto px-6 py-12" id="top">
+      <div className="max-w-4xl mx-auto px-6 py-12" id="top">
         {/* Author and Post Meta */}
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
@@ -88,7 +95,14 @@ export default function PostDetail({ post, postComments }: Props) {
           {post.title}
         </h1>
         <div className="pt-5 pb-10">
-          <img src={post.image} alt="Blog post Image"/>
+          {/* <img src={post.image} alt="Blog post Image"/> */}
+          <Image
+            src={post.image}
+            alt="Blog post Image"
+            width={500}
+            height={500}
+            unoptimized={dev}
+          />
           {/* Subtitle here */}
         </div>
         {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">

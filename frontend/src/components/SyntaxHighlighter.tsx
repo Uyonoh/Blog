@@ -42,7 +42,7 @@ const SyntaxHighlighter = ({ htmlContent}: { htmlContent:string }) => {
 
   return (
     <div
-      className="prose prose-lg max-w-none prose-gray transition-color duration-300  dark:prose-invert leading-relaxed"
+      className="markdown prose prose-lg max-w-none prose-gray transition-color duration-300  dark:prose-invert leading-relaxed"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );
