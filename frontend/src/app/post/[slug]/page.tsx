@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  console.log("params:", params);
+  // console.log("params:", params);
   
 
   const post: Post = await getPostBySlug(slug);
@@ -69,8 +69,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   return (
-    <>
+    <div>
       <PostDetail post={post} postComments={comments} />
-    </>
+    </div>
   );
 }

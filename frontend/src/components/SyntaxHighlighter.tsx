@@ -37,11 +37,12 @@ const SyntaxHighlighter = ({ htmlContent}: { htmlContent:string }) => {
   useEffect(() => {
     setPrismTheme(localStorage.getItem('theme'));
     Prism.highlightAll();
+    console.log("HTML:", htmlContent);
   }, [htmlContent]); // Re-run effect if htmlContent changes
 
   return (
     <div
-      className="prose prose-lg max-w-none prose-gray  dark:prose-invert leading-relaxed"
+      className="prose prose-lg max-w-none prose-gray transition-color duration-300  dark:prose-invert leading-relaxed"
       dangerouslySetInnerHTML={{ __html: htmlContent }}
     />
   );

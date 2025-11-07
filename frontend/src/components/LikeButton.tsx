@@ -10,9 +10,11 @@ type LikeButtonProps = {
   postLikes: Like[];
 };
 
+// Refresh on auth state change
 export default function LikeButton({ slug: slug, initialLikes, postLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
   const [liked, setLiked] = useState(false);
+  const user = localStorage.getItem("user");
   console.log("Like" + liked);
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export default function LikeButton({ slug: slug, initialLikes, postLikes }: Like
       setLiked(true);
     } else {
       console.log("likes: ", postLikes);
+      console.log("USer:", user);
     }
   }, [postLikes]);
 
@@ -50,9 +53,11 @@ export default function LikeButton({ slug: slug, initialLikes, postLikes }: Like
   return (
     <button
       onClick={handleLike}
-      className={`px-4 py-2 mt-4 rounded ${
-        liked ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-      } text-white font-bold transition`}
+      disabled={liked || !user}
+      // className={`px-4 py-2 mt-4 rounded ${
+      //   liked ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+      // } text-white font-bold transition`}
+      className="px-4 py-2 mt-4 rounded bg-blue-500 hover:bg-blue-600 text-white font-bold transition disabled:bg-gray-400"
     >
       👍 {likes} {liked ? "Liked" : "Like"}
     </button>

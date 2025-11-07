@@ -29,6 +29,7 @@ const Header = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("admin");
     localStorage.removeItem("username");
+    localStorage.removeItem("user");
     setIsAuthenticated(false);
     router.push("/");
   };

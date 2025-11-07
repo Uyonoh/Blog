@@ -58,15 +58,7 @@ export default function PostDetail({ post, postComments }: Props) {
 
   return (
     <>
-      {/* <Head>
-        <title>{post.title} | {post.author}&apos;</title>
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.summary} />
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary" />
-
-      </Head> */}
-      <div className="max-w-2xl mx-auto px-6 py-12">
+      <div className="max-w-2xl mx-auto px-6 py-12" id="top">
         {/* Author and Post Meta */}
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
@@ -95,8 +87,9 @@ export default function PostDetail({ post, postComments }: Props) {
         <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-200 leading-tight">
           {post.title}
         </h1>
-        <div>
+        <div className="pt-5 pb-10">
           <img src={post.image} alt="Blog post Image"/>
+          {/* Subtitle here */}
         </div>
         {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
           {post.content}
@@ -158,6 +151,6 @@ export default function PostDetail({ post, postComments }: Props) {
   );
 };
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// function delay(ms: number) {
+//   return new Promise((resolve) => setTimeout(resolve, ms));
+// }
