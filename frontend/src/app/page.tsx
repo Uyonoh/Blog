@@ -15,11 +15,11 @@ export default async function Page() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pt-2 pb-7">
       <h1 className="text-5xl font-bold text-center text-blue-600 dark:text-gray-200 mb-8">
         {/* Blog Posts */}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-12">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

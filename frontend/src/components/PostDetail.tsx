@@ -65,7 +65,7 @@ export default function PostDetail({ post, postComments }: Props) {
 
   return (
     <>
-      <div className="max-w-4xl mx-auto px-6 py-12" id="top">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Author and Post Meta */}
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
@@ -91,7 +91,7 @@ export default function PostDetail({ post, postComments }: Props) {
         </div>
 
         {/* Post Title and Content */}
-        <h1 className="text-2xl pt-5 font-bold text-gray-900 dark:text-gray-200 leading-tight">
+        <h1 className="text-2xl lg:text-3xl pt-5 font-bold text-gray-900 dark:text-gray-200 leading-tight">
           {post.title}
         </h1>
         <div className="pt-5 pb-10">

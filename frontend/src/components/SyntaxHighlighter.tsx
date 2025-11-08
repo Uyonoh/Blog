@@ -37,7 +37,6 @@ const SyntaxHighlighter = ({ htmlContent}: { htmlContent:string }) => {
   useEffect(() => {
     setPrismTheme(localStorage.getItem('theme'));
     Prism.highlightAll();
-    console.log("HTML:", htmlContent);
   }, [htmlContent]); // Re-run effect if htmlContent changes
 
   return (

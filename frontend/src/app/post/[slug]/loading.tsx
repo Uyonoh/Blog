@@ -3,7 +3,7 @@ import React from "react";
 export default function PostDetailSkeleton() {
   return (
     <>
-    <div className="flex flex-col max-w-2xl mx-auto px-6 py-12 animate-pulse">
+    <div className="max-w-4xl mx-auto px-6 py-12 animate-pulse">
       {/* Author Section */}
       <div className="flex items-center space-x-3 mb-6">
         <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
