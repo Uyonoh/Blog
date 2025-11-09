@@ -73,12 +73,12 @@ export const PostCard = ({ post }: PostCardProps) => {
       return topic.name
     });
 
-    return names.join(" | ")
+    return names //names.join(" | ")
   }
 
   return (
     <div
-      className="bg-white dark:bg-inherit shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="bg-white dark:bg-inherit shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-102 transition-shadow transition-transform duration-300"
       onClick={handleClick}
     >
       {/* card head */}
@@ -86,9 +86,16 @@ export const PostCard = ({ post }: PostCardProps) => {
         <span className="text-gray-500 dark:text-gray-100 text-sm">
           {post.author}
         </span>
-        <span className="text-blue-500 dark:text-yellow-500 text-sm">
+
+        {/* Topic */}
+        <div className="topics">
+          {parseTopics(post.topics).map((topic, key) =>{
+            return <span key={key} className="text-blue-500 dark:text-yellow-500 text-sm cursor-pointer">{topic}</span>
+          })}
+        </div>
+        {/* <span className="text-blue-500 dark:text-yellow-500 text-sm">
           {parseTopics(post.topics)}
-        </span>
+        </span> */}
       </div>
 
       {/* main body */}
@@ -102,7 +109,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           <h2 className="w-auto text-xl font-semibold text-gray-800 dark:text-gray-300">
             {post.title}
           </h2>
-          <p className="text-gray-600 dark:text-white mt-4">{post.summary || post.content }</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-4">{post.summary || post.content }</p>
         </div>
         
       </div>

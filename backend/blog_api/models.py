@@ -14,16 +14,25 @@ class Post(models.Model):
     else:
         image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE) # set to Default, anon
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField('Topic', related_name="blog_posts", blank=True)
+    # tags = models.JSONField
     # likes = models.ManyToManyField('Like', related_name='liked_posts', blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         if not self.slug:
-            self.slug = slugify(self.title) + "_" + str(self.id)
+            self.slug = slugify(self.title)
+
+            # Check if slug already exists
+            i = 1
+            slug = self.slug
+            while Post.objects.filter(slug=slug).count() > 0:
+                slug = f"{self.slug}_{i}"
+                i += 1
+            self.slug = slug
             self.save()
 
     def __str__(self):

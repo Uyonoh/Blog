@@ -70,9 +70,9 @@ class PostSerializer(serializers.ModelSerializer):
             return obj.likes.filter(id=user.id).exists()
         return False
     
-    def get_summary(self, obj):
-        if len(obj.content) > 35:
-            return obj.content[:100] + '...'    
+    def get_summary(self, obj, n=100):
+        if len(obj.content) > n:
+            return obj.content[:n] + '...'    
         return obj.content
     
     def get_author(self, obj):
