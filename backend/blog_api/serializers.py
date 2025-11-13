@@ -53,12 +53,29 @@ class PostSerializer(serializers.ModelSerializer):
         fields += ['summary', 'slug', 'topics', 'topic_ids', 'html_content']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
+    # def get_image(self, obj):
+    #     if isinstance(obj, Post) and obj.image:
+    #         if settings.OFFLINE:
+    #             return "http://localhost:8000" + obj.image.url
+    #         else:
+    #             return obj.image.url
+    
     def get_image(self, obj):
-        if isinstance(obj, Post):
-            if settings.OFFLINE:
-                return "http://localhost:8000" + obj.image.url
-            else:
-                return obj.image.url
+        if not obj.image:
+            return None
+
+        if settings.OFFLINE is False:
+            # If online (using Cloudinary), obj.image.url should already be absolute
+            return obj.image.url
+
+        # If OFFLINE (using local ImageField/storage), we need the full URL context.
+        # This will construct the full URL (e.g., http://localhost:8000/media/...)
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.image.url)
+        else:
+            # Fallback for offline mode if request context is somehow missing (e.g. management command)
+            return "http://localhost:8000" + obj.image.url
 
     def get_likes_count(self, obj):
         return obj.likes.count()

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { Sun, Moon } from "lucide-react";
 import { setPrismTheme } from './SyntaxHighlighter';
 import Prism from 'prismjs';
-import { useTheme } from './ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 
 export default function DarkModeToggle() {
   const { theme, toggleTheme } = useTheme();

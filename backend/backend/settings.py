@@ -44,10 +44,12 @@ if DEBUG:
         "127.0.0.1",
         "localhost",
         "10.0.2.15",
+        "192.168.43.202",
     ]
     BLOG_ORIGINS = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://192.168.43.202:3000",
         ]
 else:
     ALLOWED_HOSTS = [
@@ -91,6 +93,7 @@ INSTALLED_APPS += [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',  
     # Your app
+    'users',
     'blog_api',
 ]
 
@@ -187,12 +190,16 @@ SITE_ID = 1
 # Django Rest Framework settings for JWT authentication
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ]
 }
 
 # For simple JWT settings
@@ -202,10 +209,12 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
+    # "ALGORITHM": "HS256",
+    # "SIGNING_KEY": os.getenv("JWT_SECRET_KEY"),
 }
 
 
@@ -253,6 +262,14 @@ if not OFFLINE:
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cookies
+
+REFRESH_COOKIE_NAME = "ub_refresh_token"  # used in views
+REFRESH_COOKIE_SECURE = True  # True in production (requires HTTPS)
+REFRESH_COOKIE_SAMESITE = "None"  # None -> allow cross-site, set Secure=True
+REFRESH_COOKIE_HTTPONLY = True
+REFRESH_COOKIE_PATH = "/auth/"   
 
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN" # Default, but good to be explicit

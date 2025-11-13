@@ -3,8 +3,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { APIROOT, authFetch } from "../../../utils/auth";
+import { APIROOT } from "@/lib/auth";
 import { Topic } from "../../../components/PostCard";
+import { useAuth } from "@/context/AuthContext";
 
 function CreatePost() {
     const [title, setTitle] = useState<string>("");
@@ -12,7 +13,9 @@ function CreatePost() {
     const [image, setImage] = useState<string|Blob>("");
     const [topicChoices, setTopicChoices] = useState<Topic[]>([]);
     const [selectedValues, setSelectedValues] = useState<string[]>([]);
-    const router = useRouter()
+
+    const router = useRouter();
+    const { authFetch, user } = useAuth();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -22,6 +25,11 @@ function CreatePost() {
     };
 
     useEffect(() => {
+        // route to home if not staff
+        if (!user || !user.is_staff) {
+            router.replace("/");
+        }
+
         authFetch(APIROOT + "/api/topics", {
 
         }).then((response) => {

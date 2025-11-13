@@ -52,6 +52,7 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, context={'request': request})
         return Response(serializer.data)
     
+    # TODO: Protext with cutom admin group
     def perform_create(self, serializer):
         image = self.request.FILES.get("image")
         serializer.save(author=self.request.user, image=image)

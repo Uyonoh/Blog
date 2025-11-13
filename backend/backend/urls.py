@@ -20,32 +20,37 @@ from django.conf import settings
 from django.conf.urls.static import static
 from dj_rest_auth.views import LoginView, LogoutView
 from dj_rest_auth.registration.views import RegisterView
-from .views import get_current_user
+from .views import get_current_user, CustomTokenObtainPairView
 
 
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.middleware.csrf import get_token
 from django.http import JsonResponse
     
-@ensure_csrf_cookie
-def get_csrf_token(request):
-    return JsonResponse({
-        'detail': 'CSRF cookie set',
-        'csrfToken': get_token(request),
-    })
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Social authentication URLs
     # path('auth/', include('allauth.urls')),
-    path('auth/login/', LoginView.as_view(), name='login'),
-    path('auth/logout/', LogoutView.as_view(), name='logout'),
-    path('auth/register/', RegisterView.as_view(), name='register'),
-    path('auth/user/', get_current_user, name='current_user'),
-    path('auth/csrf/', get_csrf_token),
+    # path('auth/login/', LoginView.as_view(), name='login'),
+    # path('auth/logout/', LogoutView.as_view(), name='logout'),
+    # path('auth/register/', RegisterView.as_view(), name='register'),
+    # path('auth/user/', get_current_user, name='current_user'),
+    # path('auth/csrf/', get_csrf_token),
+    path('auth/', include('users.urls')),
     path('', include('blog_api.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+from rest_framework_simplejwt import views as jwt_views
+
+urlpatterns.extend([
+    path('auth/token/',
+         CustomTokenObtainPairView.as_view(),
+         name ='token_obtain_pair'),
+    path('auth/token/refresh/',
+         jwt_views.TokenRefreshView.as_view(),
+         name ='token_refresh'),
+    # path('', include('app.urls')),
+])

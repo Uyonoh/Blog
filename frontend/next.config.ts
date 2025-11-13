@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
         pathname: '/media/**',
       },
       {
+        protocol: 'http',
+        hostname: '192.168.43.202',
+        port: '8000',
+        pathname: '/media/**',
+      },
+      {
         protocol: 'https',
         hostname: 'uyonoh.com',
         port: '',

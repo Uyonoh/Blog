@@ -1,7 +1,7 @@
 import { Post, PostCard } from "../components/PostCard";
 import { getPosts } from "@/lib/data";
 
-export const revalidate = 60; // revalidate every 60 seconds
+export const revalidate = 2; // revalidate every 60 seconds
 
 export default async function Page() {
   const posts: Post[] = await getPosts();

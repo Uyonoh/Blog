@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Head from 'next/head';
-import { APIROOT, authFetch } from "@/utils/auth";
+import { APIROOT } from "@/lib/auth";
+import { useAuth } from "@/context/AuthContext";
 import CommentForm from "@/components/CommentForm";
 import LikeButton from "@/components/LikeButton";
 import {Post, Comment} from "@/components/PostCard";
@@ -12,7 +13,7 @@ import SyntaxHighlighter from "@/components/SyntaxHighlighter";
 import { getPostBySlug, getPostComentsBySlug } from "@/lib/data";
 import Prism from 'prismjs';
 import { GetStaticPaths, GetStaticProps } from "next";
-import path from "path";
+import { useRouter } from "next/navigation";
 
 // Styles
 import "@/styles/posts.css";
@@ -26,7 +27,12 @@ type Props = {
 export default function PostDetail({ post, postComments }: Props) {
   const [comments, setComments] = useState<Comment[]>(postComments);
   const [error, setError] = useState<string>("");
-  const dev = !!process.env.NEXT_PUBLIC_DEV || false;
+
+  const router = useRouter();
+  const { authFetch } = useAuth();
+
+  const dev = !!process.env.NEXT_PUBLIC_DEV;
+  console.log("Dev:", dev);
 
   useEffect(() => {
     setTimeout(() => {
@@ -35,6 +41,23 @@ export default function PostDetail({ post, postComments }: Props) {
     }, 500);
 
   }, []);
+
+  function useRefreshComments(slug: string) {
+    useEffect(() => {
+        async function getSetComments() {
+            const comments = await getPostComentsBySlug(slug);
+            setComments(comments);
+        }
+
+        // Wont run on mount, only after interval
+        const intervalId = setInterval(getSetComments, 1 * 60 * 1000); // Check comments every 1 min
+
+        return () => clearInterval(intervalId);
+    }, []);
+  }
+
+  useRefreshComments(post.slug);
+
 
   const handleCommentSubmit = async (author: string, content: string) => {
     try {

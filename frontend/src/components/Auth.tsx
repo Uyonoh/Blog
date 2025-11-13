@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 // import { useRouter } from "next/router";
-import { APIROOT, authFetch } from "../utils/auth";
+import { APIROOT } from "@/lib/auth";
+import { useAuth } from "@/context/AuthContext";
 
 type AuthProps = {
   register: boolean;
@@ -23,8 +24,11 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [username, setUsername] = useState(""); // Only for registration
+  const [submited, setSubmited] = useState(false);
   const [error, setError] = useState("");
   // const router = useRouter();
+
+  const { setAccess, authFetch } = useAuth();
 
   
 
@@ -42,15 +46,17 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       : { username, password };
 
     try {
-      const response = await authFetch(
+      setSubmited(true);
+
+      const response = await fetch(
         `${APIROOT}/auth/${endpoint}/`,
         {
           method: "POST",
-          // headers: {
-          //   "content-type": "application/json"
-          // },
+          headers: {
+            "content-type": "application/json"
+          },
           body: JSON.stringify(body),
-          credentials: "include"
+          credentials: "include",
         }
       );
 
@@ -61,11 +67,8 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       }
 
       const data = await response.json();
-      // console.log(data);
-      localStorage.setItem("access_token", data.key); // Store JWT access token
-      // localStorage.setItem("refresh", data.refresh); // Store refresh token
-      // // localStorage.setItem("username", data.username); // Store username
-      // const decoded: DecodedToken = jwtDecode(data.access);
+      setAccess(data.access_token);
+      setAccess(data.access_token);
       try {
         const response = await authFetch(APIROOT + "/auth/user/");
         const data = await response.json();
@@ -87,11 +90,13 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
       if (error instanceof TypeError) {
         setError(error.message);
       }
+    } finally {
+      setSubmited(false);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 shadow-lg rounded">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white dark:bg-gray-800 dark:text-white rounded">
       <h2 className="text-2xl font-bold mb-4">{isRegister ? "Register" : "Login"}</h2>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -132,7 +137,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
           className="w-full p-2 border rounded mb-2"
         />
       )}
-        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+        <button disabled={submited} type="submit" className="w-full bg-blue-500 text-white p-2 rounded disabled:animate-pulse">
           {isRegister ? "Register" : "Login"}
         </button>
       </form>

@@ -1,72 +1,96 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DarkModeToggle from "./DarkModeToggle";
 import Auth from "./Auth";
-import { APIROOT, authFetch } from "../utils/auth";
+import { APIROOT } from "@/lib/auth";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   // const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
+  const isMounted = useRef(false);
   const [isRegister, setIsRegister] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const { user, access, setAccess, authFetch } = useAuth();
 
+  // Open login model if no user
   useEffect(() => {
-    // Check if user is logged in (you may replace this with real auth check)
-    const token = localStorage.getItem("access_token");
-    const admin = localStorage.getItem("admin");
-    // TODO: Verify token
-    setIsAuthenticated(!!token);
-    setIsAdmin(admin === "true" ? true : false);
-  }, []);
+    if (isMounted.current) {
+      if (!user) {
+        setIsAuthModalOpen(true);
+        setIsAdmin(false);
+      } else {
+        setIsAdmin(user.is_staff);
+      }
+    } else {
+      isMounted.current = true;
+    }
+  }, [user]);
 
-  const handleLogout = () => {
-    authFetch(APIROOT + "/auth/logout/", {method: "POST"});
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("admin");
-    localStorage.removeItem("username");
-    localStorage.removeItem("user");
-    setIsAuthenticated(false);
+
+  const handleLogout = async () => {
+    const res = await authFetch(APIROOT + "/auth/logout/", {
+      method: "POST",
+      credentials: "include",
+    });
+    setAccess(null);
     router.push("/");
   };
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      // setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const savedTheme = localStorage.getItem("theme");
+  //   if (savedTheme === "dark") {
+  //     document.documentElement.classList.add("dark");
+  //   }
+  // }, []);
 
   const toggleMenu = () => {
     const menu = document.getElementById("mobile-menu");
     menu?.classList.toggle("hidden");
-  }
+  };
 
   const handleLoginSuccess = () => {
-    setIsAuthenticated(true);  // Set authentication state to true
     setIsAuthModalOpen(false); // Close the auth modal
   };
 
   // TODO: Convert menu to usestate based
   return (
     <header className="bg-white dark:bg-gray-900 shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
-      <Link href="/">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer">
-          Uyonoh&apos;s Blog
-        </h1>
-      </Link>
+      {/* <Link href="/"> */}
+      <h1
+        className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer"
+        onClick={() => router.push("/")}
+      >
+        Uyonoh&apos;s Blog
+      </h1>
+      {/* </Link> */}
 
       <div className="flex lg:hidden">
-        <button type="button" className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white"
-        onClick={toggleMenu}>
+        <button
+          type="button"
+          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white"
+          onClick={toggleMenu}
+        >
           <span className="sr-only">Open main menu</span>
-          <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          <svg
+            className="size-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            data-slot="icon"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
           </svg>
         </button>
       </div>
@@ -85,14 +109,14 @@ const Header = () => {
           Contact
         </Link>
 
-        { isAdmin && (
+        {isAdmin && (
           <Link
             href="/post/create/"
             // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
           >
             Create
           </Link>
-        ) }
+        )}
       </nav>
 
       <div className="hidden lg:flex  items-center space-x-4">
@@ -104,7 +128,7 @@ const Header = () => {
 
         <DarkModeToggle />
 
-        {isAuthenticated ? (
+        {user ? (
           <>
             <Link
               href="/profile"
@@ -122,10 +146,10 @@ const Header = () => {
         ) : (
           <>
             <button
-            onClick={() => {
+              onClick={() => {
                 setIsRegister(false);
-                setIsAuthModalOpen(true)}
-              }
+                setIsAuthModalOpen(true);
+              }}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
             >
               Login
@@ -133,8 +157,8 @@ const Header = () => {
             <button
               onClick={() => {
                 setIsRegister(true);
-                setIsAuthModalOpen(true)}
-              }
+                setIsAuthModalOpen(true);
+              }}
               className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
             >
               Register
@@ -156,82 +180,128 @@ const Header = () => {
             </Link>
 
             {/* Replace with component */}
-            <button type="button" className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-white"
-            onClick={toggleMenu}>
+            <button
+              type="button"
+              className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-white"
+              onClick={toggleMenu}
+            >
               <span className="sr-only">Close menu</span>
-              <svg className="size-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              <svg
+                className="size-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+                data-slot="icon"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
               </svg>
-          </button>
+            </button>
           </div>
 
           <div className="mt-6 flow-root text-gray-700 dark:text-white hover:text-blue-500">
             <div className="-my6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 <div className="-mx-3 *:dark:text-white *:dark:hover:bg-gray-500 first:hover:none">
-
-                  {isAuthenticated ? (
+                  {user ? (
                     <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:none *:dark:hover:bg-gray-500">
-                      <Link href="/profile" className="hover:bg-gray-50 w-full" aria-controls="disclosure-1" aria-expanded="false"
-                      onClick={toggleMenu}>
+                      <Link
+                        href="/profile"
+                        className="text-left hover:bg-gray-50 w-full"
+                        aria-controls="disclosure-1"
+                        aria-expanded="false"
+                        onClick={toggleMenu}
+                      >
                         Profile
                       </Link>
                       <span className="flex w-full justify-center">|</span>
-                      <button className="hover:bg-gray-50 pointer w-full align-self-end" aria-controls="disclosure-1" aria-expanded="false"
-                      onClick={handleLogout}>
+                      <button
+                        className="hover:bg-gray-50 pointer w-full align-self-end"
+                        aria-controls="disclosure-1"
+                        aria-expanded="false"
+                        onClick={handleLogout}
+                      >
                         Logout
                       </button>
                     </div>
-                  ): (
+                  ) : (
                     <div className="grid grid-cols-3 w-full items-center justify-items-center rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 *:dark:hover:bg-gray-500">
-                      <button className="hover:bg-gray-50 w-full" aria-controls="disclosure-1" aria-expanded="false"
-                      onClick={() => {
-                        toggleMenu();
-                        setIsRegister(false);
-                        setIsAuthModalOpen(true)}
-                      }>
+                      <button
+                        className="text-left hover:bg-gray-50 w-full"
+                        aria-controls="disclosure-1"
+                        aria-expanded="false"
+                        onClick={() => {
+                          toggleMenu();
+                          setIsRegister(false);
+                          setIsAuthModalOpen(true);
+                        }}
+                      >
                         Login
                       </button>
                       <span className="flex w-full justify-center">|</span>
-                      <button className="hover:bg-gray-50 w-full align-self-end" aria-controls="disclosure-1" aria-expanded="false"
-                      onClick={() => {
-                        toggleMenu();
-                        setIsRegister(true);
-                        setIsAuthModalOpen(true)}
-                      }>
+                      <button
+                        className="hover:bg-gray-50 w-full align-self-end"
+                        aria-controls="disclosure-1"
+                        aria-expanded="false"
+                        onClick={() => {
+                          toggleMenu();
+                          setIsRegister(true);
+                          setIsAuthModalOpen(true);
+                        }}
+                      >
                         Signup
                       </button>
                     </div>
                   )}
 
                   {isAdmin && (
-                    <Link href="/post/create" className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false"
-                    onClick={toggleMenu}>
-                    Create Post
-                  </Link>
+                    <Link
+                      href="/post/create"
+                      className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                      aria-controls="disclosure-1"
+                      aria-expanded="false"
+                      onClick={toggleMenu}
+                    >
+                      Create Post
+                    </Link>
                   )}
 
-                  <Link href="/#" className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false"
-                  onClick={toggleMenu}>
-                  About
-                </Link>
-                <Link href="/#" className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false"
-                onClick={toggleMenu}>
-                  Contact
-                </Link>
+                  <Link
+                    href="/#"
+                    className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    aria-controls="disclosure-1"
+                    aria-expanded="false"
+                    onClick={toggleMenu}
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/#"
+                    className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    aria-controls="disclosure-1"
+                    aria-expanded="false"
+                    onClick={toggleMenu}
+                  >
+                    Contact
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       {/* Auth Modal */}
       {isAuthModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-100 dark:bg-black bg-opacity-50"
+          onClick={(e) => {setIsAuthModalOpen(false)}}>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setIsAuthModalOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

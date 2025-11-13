@@ -8,7 +8,7 @@ from cloudinary.models import CloudinaryField
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
     if settings.OFFLINE:
         image = models.ImageField(upload_to="posts/")
     else:

@@ -1,9 +1,11 @@
-import { APIROOT } from "../utils/auth";
+import { promises } from "dns";
+import { APIROOT } from "./auth";
+import type { Post, Comment } from "@/components/PostCard";
 
-export async function getPosts() {
+export async function getPosts(): Promise<Post[]> {
   try {
     const response = await fetch(`${APIROOT}/api/posts/`, {
-      next: { revalidate: 60 }, // revalidate every 60 seconds
+      // next: { revalidate: 60 }, // revalidate every 60 seconds
     });
     return response.json();
   } catch (error: unknown) {
@@ -14,7 +16,7 @@ export async function getPosts() {
   }
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<Post> {
   try {
     const response = await fetch(`${APIROOT}/api/posts/${slug}`, {
       // next: { revalidate: 60 }, // revalidate every 60 seconds
@@ -38,7 +40,7 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
-export async function getPostComentsBySlug(slug: string) {
+export async function getPostComentsBySlug(slug: string): Promise<Comment[]> {
   try {
     const response = await fetch(`${APIROOT}/api/posts/${slug}/comments/`, {
       // next: { revalidate: 60 }, // revalidate every 60 seconds
