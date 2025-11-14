@@ -41,16 +41,3 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-from rest_framework_simplejwt import views as jwt_views
-
-urlpatterns.extend([
-    path('auth/token/',
-         CustomTokenObtainPairView.as_view(),
-         name ='token_obtain_pair'),
-    path('auth/token/refresh/',
-         jwt_views.TokenRefreshView.as_view(),
-         name ='token_refresh'),
-    # path('', include('app.urls')),
-])

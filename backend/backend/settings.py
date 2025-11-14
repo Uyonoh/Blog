@@ -185,7 +185,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SITE_ID = 1 
 
-# REST_USE_JWT = True  # Use JWT for dj-rest-auth
+REST_USE_JWT = True  # Use JWT for dj-rest-auth
 
 # Django Rest Framework settings for JWT authentication
 REST_FRAMEWORK = {

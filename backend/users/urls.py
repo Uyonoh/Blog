@@ -1,5 +1,6 @@
 from django.urls import path, include
 from .views import (
+    RegisterView,
     LoginSetCookieView, 
     RefreshFromCookieView, 
     LogoutView, 
@@ -11,6 +12,7 @@ from .views import (
 app_name = "users"
 
 urlpatterns = [
+    path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginSetCookieView.as_view(), name="token_obtain_pair_cookie"),
     path("refresh/", RefreshFromCookieView.as_view(), name="token_refresh_cookie"),
     path("logout/", LogoutView.as_view(), name="logout"),

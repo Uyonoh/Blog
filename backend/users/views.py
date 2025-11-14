@@ -1,15 +1,18 @@
 from django.http import JsonResponse
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer, UserSerializer
+from .serializers import CustomTokenObtainPairSerializer, UserSerializer, CustomRegisterSerializer
+# from dj_rest_auth.registration.views import RegisterView
+
 
 from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from dj_rest_auth.utils import jwt_encode
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 
-# Create your views here.
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
     
@@ -34,10 +37,58 @@ def get_current_user(request):
     user = request.user
     serializer = UserSerializer(user)
     
-    print(f"USER = {serializer.data}")
-    
     # Use DRF's Response object for correct API rendering
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+class RegisterView(CreateAPIView):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CustomRegisterSerializer
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        response = self.get_response(user, headers)
+
+        return response
+
+    def perform_create(self, serializer):
+        user = serializer.save(self.request)
+        self.access_token, self.refresh_token = jwt_encode(user)
+
+        return user
+
+    def get_response(self, user, headers=None):
+
+        data = {
+                "access_token": str(self.access_token),
+                "user": UserSerializer(user).data
+                }
+        
+        if not data:
+            return Response(status=status.HTTP_204_NO_CONTENT, headers=headers)
+        
+        response = Response(
+            data=data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+            )
+
+        if self.refresh_token:
+            # Set cookie attributes based on settings
+            response.set_cookie(
+                settings.REFRESH_COOKIE_NAME,
+                self.refresh_token,
+                secure=settings.REFRESH_COOKIE_SECURE,
+                httponly=settings.REFRESH_COOKIE_HTTPONLY,
+                samesite=settings.REFRESH_COOKIE_SAMESITE,
+                path=settings.REFRESH_COOKIE_PATH,
+                max_age=int(settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"].total_seconds()),
+            )
+
+        return response
+
 
 class LoginSetCookieView(TokenObtainPairView):
     permission_classes = [permissions.AllowAny]
@@ -50,8 +101,9 @@ class LoginSetCookieView(TokenObtainPairView):
         
         refresh = data.get("refresh")
         access = data.get("access")
+        user = data.get("user")
 
-        response = Response({"access_token": access})
+        response = Response({"access_token": access, "user": user})
 
         if refresh:
             # Set cookie attributes based on settings

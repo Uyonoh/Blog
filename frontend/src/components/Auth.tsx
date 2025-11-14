@@ -28,7 +28,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [error, setError] = useState("");
   // const router = useRouter();
 
-  const { setAccess, authFetch } = useAuth();
+  const { setAccess, setUser, authFetch } = useAuth();
 
   
 
@@ -68,18 +68,8 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
 
       const data = await response.json();
       setAccess(data.access_token);
-      setAccess(data.access_token);
-      try {
-        const response = await authFetch(APIROOT + "/auth/user/");
-        const data = await response.json();
-        localStorage.setItem("user", data.id);
-        localStorage.setItem("admin", data.is_staff);
-      } catch(err: unknown) {
-        if (err instanceof ReferenceError) {
-          throw new Error("Failed to get username");
-        }
-      }
-      // localStorage.setItem("username", decoded.username); // now stored for use in comments
+      // always set user along with access
+      // setUser(data.user);
 
       // const isHome = (router.pathname === "/");
       // isHome ? router.reload() : router.push("/"); // Redirect to homepage
