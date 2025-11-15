@@ -14,7 +14,7 @@ const Header = () => {
   const isMounted = useRef(false);
   const [isRegister, setIsRegister] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { user, access, setAccess, authFetch } = useAuth();
 
@@ -50,8 +50,7 @@ const Header = () => {
   // }, []);
 
   const toggleMenu = () => {
-    const menu = document.getElementById("mobile-menu");
-    menu?.classList.toggle("hidden");
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleLoginSuccess = () => {
@@ -70,7 +69,7 @@ const Header = () => {
       </h1>
       {/* </Link> */}
 
-      <div className="flex lg:hidden">
+      <div id="open-menu" className={`flex lg:hidden ${isMenuOpen ? "hidden" : ""}`}>
         <button
           type="button"
           className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white"
@@ -168,7 +167,7 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div id="mobile-menu" className="hidden" role="dialog" aria-modal="true">
+      <div id="mobile-menu" className={`${isMenuOpen ? "" : "hidden"}`} role="dialog" aria-modal="true">
         {/* Background backdrop */}
         <div className="fixed inset-0 z-50"></div>
         <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">

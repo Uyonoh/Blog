@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer, CustomRegisterSerializer
 # from dj_rest_auth.registration.views import RegisterView
 
