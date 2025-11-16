@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ThumbsUp } from 'lucide-react';
 import { APIROOT } from "@/lib/auth";
 import { useAuth } from "@/context/AuthContext";
 import { Like } from "./PostCard";
@@ -52,9 +53,10 @@ export default function LikeButton({ slug, initialLikes, postLikes }: LikeButton
     <button
       onClick={handleLike}
       disabled={!user}
-      className={`px-4 py-2 mt-4 rounded bg-blue-500 hover:bg-blue-600 text-white font-bold transition ${(liked || !user) ? "bg-gray-400 hover:bg-gray-500" : "" }`}
+      className={`px-4 py-2 mt-4 rounded flex items-start gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold transition ${(liked || !user) ? "bg-gray-400 hover:bg-gray-500" : "" }`}
     >
-      👍 {likes > 0 ?likes : ""} 
+      <ThumbsUp size={18} />
+      <span>{likes > 0 ? likes : ""} </span>
       {/* {liked ? "Liked" : "Like"} */}
     </button>
   );

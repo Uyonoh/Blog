@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { ThumbsUp, MessageCircle, Heart } from 'lucide-react';
 
 // Define a more specific type for the post
 // type Author = {
@@ -41,6 +42,7 @@ export type Post = {
   likes_count: number;
   liked_by_user: boolean;
   comments: Comment[];
+  comments_count: number;
   topics: Topic[];
   html_content: string;
 };
@@ -113,9 +115,26 @@ export const PostCard = ({ post }: PostCardProps) => {
         </div>
         
       </div>
+
+      {/* Footer */}
       <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4 text-gray-500 dark:text-gray-100">
         <span className="text-sm">{parseDate(post.created_at)}</span>
-        <span className="text-sm">Likes: {post.likes_count}</span>
+
+        {/* Favourites, comments, likes */}
+        <div className="flex justify-between gap-2">
+          {/* <span className="text-sm flex gap-1">
+            <Heart size={18} />
+            <span>20</span>
+          </span> */}
+          <span className="text-sm flex gap-1">
+            <MessageCircle size={18} />
+            <span>{post.comments_count}</span>
+          </span>
+          <span className="text-sm flex gap-1">
+            <ThumbsUp size={18} />
+            <span>{post.likes_count}</span>
+          </span>
+        </div>
       </div>
     </div>
   );

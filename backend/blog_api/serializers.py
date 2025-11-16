@@ -30,6 +30,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
+    comments_count = serializers.SerializerMethodField()
     likes = LikeSerializer(many=True, read_only=True)
     likes_count = serializers.SerializerMethodField()
     summary = serializers.SerializerMethodField()
@@ -49,8 +50,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 'comments', 'likes', 'likes_count', 'liked_by_user']
-        fields += ['summary', 'slug', 'topics', 'topic_ids', 'html_content']
+        fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 
+                  'comments', 'likes', 'likes_count', 'liked_by_user', 'comments_count',
+                  'summary', 'slug', 'topics', 'topic_ids', 'html_content']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     # def get_image(self, obj):
@@ -86,6 +88,9 @@ class PostSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             return obj.likes.filter(id=user.id).exists()
         return False
+    
+    def get_comments_count(self, obj):
+        return obj.comments.count()
     
     def get_summary(self, obj, n=100):
         if len(obj.content) > n:
