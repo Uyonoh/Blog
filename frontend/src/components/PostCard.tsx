@@ -80,7 +80,7 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   return (
     <div
-      className="bg-white dark:bg-inherit shadow-lg rounded-lg overflow-hidden hover:shadow-xl hover:scale-102 transition-shadow transition-transform duration-300"
+      className="bg-white dark:bg-inherit shadow-lg dark:shadow-gray-800 rounded-lg overflow-hidden hover:shadow-xl hover:scale-102 transition-shadow transition-transform duration-300"
       onClick={handleClick}
     >
       {/* card head */}

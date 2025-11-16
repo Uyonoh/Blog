@@ -9,15 +9,17 @@ import { Like } from "./PostCard";
 type LikeButtonProps = {
   slug: string;
   initialLikes: number;
+  initialLiked?: boolean; // Always false as this is from a server call with no user
   postLikes: Like[];
 };
 
-export default function LikeButton({ slug, initialLikes, postLikes }: LikeButtonProps) {
+export default function LikeButton({ slug, initialLikes, initialLiked, postLikes }: LikeButtonProps) {
   const [likes, setLikes] = useState(initialLikes);
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(initialLiked || false);
   const { authFetch, access, user } = useAuth();
 
-  // Check if user already liked post
+  // Check if user already liked post, client side
+  // Might switch to api end point if likes per post reaches high levels
   useEffect(() => {
     if (user && postLikes.find((item) => item.user === user.id as unknown as string)) {
       setLiked(true);
@@ -28,14 +30,8 @@ export default function LikeButton({ slug, initialLikes, postLikes }: LikeButton
     if (!user) return;
 
     try {
-      const token = localStorage.getItem("access_token");
       const response = await authFetch(`${APIROOT}/api/posts/${slug}/like/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token || ""}`,
-        },
-        credentials: "include",
       });
 
       if (response.ok) {
