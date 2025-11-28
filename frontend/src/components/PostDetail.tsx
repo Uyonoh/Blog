@@ -31,7 +31,7 @@ export default function PostDetail({ post, postComments }: Props) {
   const router = useRouter();
   const { authFetch } = useAuth();
 
-  const dev = !!process.env.NEXT_PUBLIC_DEV;
+  const dev = !!process.env.NEXT_PUBLIC_DEV; // wrap with conditional (?? false etc)
   console.log("Dev:", dev);
 
   useEffect(() => {
