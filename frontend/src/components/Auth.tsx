@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { useRouter } from "next/router";
 import { APIROOT } from "@/lib/auth";
 import { useAuth } from "@/context/AuthContext";
@@ -25,6 +25,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   const [password2, setPassword2] = useState("");
   const [username, setUsername] = useState(""); // Only for registration
   const [submited, setSubmited] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState("");
   // const router = useRouter();
 
@@ -35,12 +36,39 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
   // Call to ensure CSRF token is set
   getCSRFToken();
 
+  // validation
+  const validateForm = () => {
+    const endpoint = isRegister ? "register" : "login"
+
+    // Username
+    if (!(username.length >= 2)) return false;
+
+    // Password
+    if (!(password.length >= 2)) return false;
+
+    if (endpoint == "register") {
+       // Email
+      if (!(email.length >= 2)) return false;
+      
+      // Password
+      if (!(password1.length >= 2)) return false;
+      if (!(password1 === password2)) return false;
+    }
+
+    return true;
+  }
+
+  useEffect(() => {
+    setIsValid(validateForm());
+  }, [username, email, password, password1, password2]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
 
     const endpoint = isRegister ? "register" : "login"; // Determine endpoint
+    setIsValid(validateForm());
     const body = isRegister
       ? { username, email, password1, password2 }
       : { username, password };
@@ -127,7 +155,7 @@ const Auth = ({ register, onLoginSuccess }: AuthProps) => {
           className="w-full p-2 border rounded mb-2"
         />
       )}
-        <button disabled={submited} type="submit" className="w-full bg-blue-500 text-white p-2 rounded disabled:animate-pulse">
+        <button disabled={!isValid || submited} type="submit" className={'w-full bg-blue-500 text-white p-2 rounded cursor-pointer disabled:cursor-not-allowed' + (submited? " animate-pulse ": "") + (!isValid? " bg-gray-400 ": "" )}>
           {isRegister ? "Register" : "Login"}
         </button>
       </form>
