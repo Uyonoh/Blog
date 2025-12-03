@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework import serializers
 from .models import Post, Comment, Like, Topic
+from .extensions import EscapedNewLineExtension
 import markdown
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -52,7 +53,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 
                   'comments', 'likes', 'likes_count', 'liked_by_user', 'comments_count',
-                  'summary', 'slug', 'topics', 'topic_ids', 'html_content']
+                  'summary', 'slug', 'topics', 'topic_ids', 'html_content', 'excerpt']
         read_only_fields = ['id', 'created_at', 'updated_at']
 
     # def get_image(self, obj):
@@ -107,4 +108,6 @@ class PostSerializer(serializers.ModelSerializer):
         # 'nl2br': for converting single newlines to <br> tags (like hitting Enter once)
         # 'extra': for additional features like tables and footnotes
         # , 'codehilite', 'admonition'
-        return markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'extra'])
+        return markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'toc',
+                                                          'extra', #EscapedNewLineExtension()
+                                                          ])

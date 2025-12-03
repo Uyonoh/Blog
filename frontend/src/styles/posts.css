@@ -3,8 +3,20 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-.markdown p { @apply font-medium leading-relaxed py-2 break-all; }
-.markdown h1 { @apply font-bold     text-2xl    leading-tight py-4; }
-.markdown h2 { @apply font-semibold text-xl     leading-tight pt-4 pb-1; }
+.markdown p, li { @apply font-medium leading-relaxed py-2; }
+.markdown h1 { @apply font-bold     text-2xl    leading-tight py-4 border-b;}
+.markdown h2 { @apply font-semibold text-xl     leading-tight pt-4 pb-1 border-b border-gray-400 dark:border-gray-300; }
 .markdown h3 { @apply font-semibold text-lg     leading-tight pt-4 pb-1; }
 .markdown h4 { @apply font-medium   text-base   leading-tight pt-4 pb-1; }
+
+.markdown ul {
+    padding-left: 1rem;
+    list-style-type: square;
+    li {
+        white-space: normal;
+    }
+}
+
+.markdown code {
+    overflow: auto;
+}

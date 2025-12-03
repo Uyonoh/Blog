@@ -14,6 +14,7 @@ class Post(models.Model):
     else:
         image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
+    excerpt = models.CharField(max_length=150, null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE) # set to Default, anon
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -23,6 +24,8 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        # Auto add slug
         if not self.slug:
             self.slug = slugify(self.title)
 
@@ -34,6 +37,8 @@ class Post(models.Model):
                 i += 1
             self.slug = slug
             self.save()
+        
+        # TODO: Auto add excerpt using AI if None
 
     def __str__(self):
         return self.title

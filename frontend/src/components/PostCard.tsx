@@ -45,6 +45,7 @@ export type Post = {
   comments_count: number;
   topics: Topic[];
   html_content: string;
+  excerpt: string;
 };
 
 type PostCardProps = {
@@ -111,7 +112,7 @@ export const PostCard = ({ post }: PostCardProps) => {
           <h2 className="w-auto text-xl font-semibold text-gray-800 dark:text-gray-300">
             {post.title}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-4">{post.summary || post.content }</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-4">{ post.excerpt || post.summary }</p>
         </div>
         
       </div>
