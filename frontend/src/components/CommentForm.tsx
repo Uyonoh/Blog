@@ -31,7 +31,8 @@ const CommentForm = ({ onSubmit }: CommentFormProps) => {
         onChange={(e) => setContent(e.target.value)}
         className="border p-2 mb-2 w-full rounded dark:bg-gray-900 dark:text-white"
       />
-      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full">
+      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full disabled:bg-gray-400"
+        disabled={!content || content.length < 2}>
         Submit Comment
       </button>
     </form>
