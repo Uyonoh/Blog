@@ -32,7 +32,6 @@ const Header = () => {
     }
   }, [user]);
 
-
   const handleLogout = async () => {
     const res = await authFetch(APIROOT + "/auth/logout/", {
       method: "POST",
@@ -69,7 +68,10 @@ const Header = () => {
       </h1>
       {/* </Link> */}
 
-      <div id="open-menu" className={`flex lg:hidden ${isMenuOpen ? "hidden" : ""}`}>
+      <div
+        id="open-menu"
+        className={`flex lg:hidden ${isMenuOpen ? "hidden" : ""}`}
+      >
         <button
           type="button"
           className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-white"
@@ -95,27 +97,11 @@ const Header = () => {
       </div>
 
       <nav className="hidden lg:flex space-x-6 text-gray-700 dark:text-gray-300 *:hover:text-blue-500">
-        <Link
-          href="/about"
-          // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
-        >
-          About
-        </Link>
-        <Link
-          href="/contact"
-          // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
-        >
-          Contact
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/topics">Topics</Link>
+        <Link href="/contact">Contact</Link>
 
-        {isAdmin && (
-          <Link
-            href="/post/create/"
-            // className="text-gray-700 dark:text-gray-300 hover:text-blue-500"
-          >
-            Create
-          </Link>
-        )}
+        {isAdmin && <Link href="/post/create/">Create</Link>}
       </nav>
 
       <div className="hidden lg:flex  items-center space-x-4">
@@ -167,7 +153,12 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div id="mobile-menu" className={`${isMenuOpen ? "" : "hidden"}`} role="dialog" aria-modal="true">
+      <div
+        id="mobile-menu"
+        className={`${isMenuOpen ? "" : "hidden"}`}
+        role="dialog"
+        aria-modal="true"
+      >
         {/* Background backdrop */}
         <div className="fixed inset-0 z-50"></div>
         <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
@@ -271,16 +262,16 @@ const Header = () => {
                   )}
 
                   <Link
-                    href="/#"
+                    href="/topics"
                     className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                     aria-controls="disclosure-1"
                     aria-expanded="false"
                     onClick={toggleMenu}
                   >
-                    About
+                    Topics
                   </Link>
                   <Link
-                    href="/#"
+                    href="/contact"
                     className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                     aria-controls="disclosure-1"
                     aria-expanded="false"
@@ -297,10 +288,16 @@ const Header = () => {
 
       {/* Auth Modal */}
       {isAuthModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-100 dark:bg-black bg-opacity-50"
-          onClick={(e) => {setIsAuthModalOpen(false)}}>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg"
-            onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-gray-100 dark:bg-black bg-opacity-50"
+          onClick={(e) => {
+            setIsAuthModalOpen(false);
+          }}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setIsAuthModalOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
