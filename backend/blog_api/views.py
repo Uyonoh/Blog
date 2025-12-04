@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Post, Comment, Like, Topic
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer, TopicSerializer
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -27,7 +27,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response({'detail': 'Post liked successfully.'}, status=status.HTTP_200_OK)
 
     
-    @action(detail=True, methods=['get', 'post'])
+    @action(detail=True, methods=['get', 'post'], permission_classes=[AllowAny])
     def comments(self, request, slug=None):
         post = self.get_object()
         

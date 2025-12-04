@@ -7,7 +7,7 @@ from cloudinary.models import CloudinaryField
 # anon = User.objects.filter(username="Anonymous")[0]
 
 class Post(models.Model):
-    title = models.CharField(max_length=70)
+    title = models.CharField(max_length=90)
     slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
     if settings.OFFLINE:
         image = models.ImageField(upload_to="posts/")
@@ -15,7 +15,7 @@ class Post(models.Model):
         image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
     excerpt = models.CharField(max_length=150, null=True, blank=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE) # set to Default, anon
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField('Topic', related_name="blog_posts", blank=True)
@@ -49,7 +49,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments", null=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True, blank=True)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -62,7 +62,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")  # Fix conflict
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="likes", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

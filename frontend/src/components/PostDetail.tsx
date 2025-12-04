@@ -29,7 +29,7 @@ export default function PostDetail({ post, postComments }: Props) {
   const [error, setError] = useState<string>("");
 
   const router = useRouter();
-  const { authFetch } = useAuth();
+  const { authFetch, user } = useAuth();
 
   const dev = !!process.env.NEXT_PUBLIC_DEV; // wrap with conditional (?? false etc)
   console.log("Dev:", dev);
@@ -60,9 +60,13 @@ export default function PostDetail({ post, postComments }: Props) {
 
 
   const handleCommentSubmit = async (author: string, content: string) => {
+    const fetchProtocol = user ? authFetch : fetch;
     try {
-      const response = await authFetch(`${APIROOT}/api/posts/${post?.slug}/comments/`, {
+      const response = await fetchProtocol(`${APIROOT}/api/posts/${post?.slug}/comments/`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ content }),
       });
 
