@@ -114,19 +114,21 @@ export default function PostDetail({ post, postComments }: Props) {
         </div>
 
         {/* Post Title and Content */}
-        <h1 className="text-2xl lg:text-3xl pt-5 font-bold text-gray-900 dark:text-gray-200 leading-tight">
+        <h1 className="text-2xl lg:text-3xl pt-10 font-bold text-gray-900 dark:text-gray-200 leading-tight  w-full">
           {post.title}
         </h1>
-        <div className="pt-5 pb-10">
-          {/* <img src={post.image} alt="Blog post Image"/> */}
+        <div className="pt-5 pb-10 relative w-full">
           <Image
             src={post.image}
-            alt="Blog post Image"
-            width={500}
-            height={500}
+            alt="Blog post Image" // add image desc to db
+            width={0}
+            height={0}
+            sizes="100vw"
+            style={{ width: '100%', height: 'auto' }}
             unoptimized={dev}
           />
           {/* Subtitle here */}
+          <p className="pt-2 italic text-lg text-center text-gray-500 dark:text-gray-400">{ post.excerpt }</p>
         </div>
         {/* <article className="prose prose-lg prose-gray dark:prose-invert mt-6">
           {post.content}
@@ -172,7 +174,7 @@ export default function PostDetail({ post, postComments }: Props) {
                   <p className="font-semibold text-gray-900 dark:text-white">
                     {comment.author}
                   </p>
-                  <p className="text-gray-700 dark:text-gray-300">
+                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {comment.content}
                   </p>
                   <p className="text-sm text-gray-500">
