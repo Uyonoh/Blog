@@ -35,12 +35,8 @@ export default function PostDetail({ post, postComments }: Props) {
   console.log("Dev:", dev);
 
   useEffect(() => {
-    setTimeout(() => {
-      Prism.highlightAll();
-      console.log("URL:", post.image);
-    }, 500);
-
-  }, []);
+    Prism.highlightAll();
+  }, [comments]);
 
   function useRefreshComments(slug: string) {
     useEffect(() => {
