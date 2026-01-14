@@ -39,24 +39,9 @@ OFFLINE = os.getenv("OFFLINE", "False").lower() in ("true", "1", "yes")
 logger.info(f"Debug: {DEBUG}")
 logger.info(f"OFFLINE: {OFFLINE}")
 
-if DEBUG:
-    ALLOWED_HOSTS = [
-        "127.0.0.1",
-        "localhost",
-        "10.0.2.15",
-        "192.168.43.202",
-    ]
-    BLOG_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://192.168.43.202:3000",
-        ]
-else:
-    ALLOWED_HOSTS = [
-        os.getenv("BLOG_HOST"),
-        os.getenv("API_HOST"),
-    ]
-    BLOG_ORIGINS = [os.getenv("BLOG_ORIGIN")]
+
+ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(", ")
+BLOG_ORIGINS = os.environ["BLOG_ORIGINS"].split(", ")
 
 # Allow requests from the frontend
 CSRF_TRUSTED_ORIGINS = BLOG_ORIGINS
