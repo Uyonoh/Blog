@@ -14,6 +14,7 @@ import { getPostBySlug, getPostComentsBySlug } from "@/lib/data";
 import Prism from 'prismjs';
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/navigation";
+import { md } from "@/lib/markdown";
 
 // Styles
 import "@/styles/posts.css";
@@ -30,13 +31,15 @@ export default function PostDetail({ post, postComments }: Props) {
 
   const router = useRouter();
   const { authFetch, user } = useAuth();
+  const html = md.render(post.content);
+
 
   const dev = !!process.env.NEXT_PUBLIC_DEV; // wrap with conditional (?? false etc)
   console.log("Dev:", dev);
 
-  useEffect(() => {
-    Prism.highlightAll();
-  }, [comments]);
+  // useEffect(() => {
+  //   Prism.highlightAll();
+  // }, [comments]);
 
   function useRefreshComments(slug: string) {
     useEffect(() => {
@@ -135,7 +138,7 @@ export default function PostDetail({ post, postComments }: Props) {
         </article> */}
         {/* Render the HTML content using dangerouslySetInnerHTML */}
         {/* Apply the 'prose' class for beautiful default styling */}
-        {post.html_content && <SyntaxHighlighter htmlContent={post.html_content} />}
+        {html && <SyntaxHighlighter htmlContent={html} />}
 
         <hr className="my-10 border-gray-300 dark:border-gray-700" />
 

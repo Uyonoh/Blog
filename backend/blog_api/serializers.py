@@ -108,6 +108,6 @@ class PostSerializer(serializers.ModelSerializer):
         # 'nl2br': for converting single newlines to <br> tags (like hitting Enter once)
         # 'extra': for additional features like tables and footnotes
         # , 'codehilite', 'admonition'
-        return markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'toc',
-                                                          'extra', #EscapedNewLineExtension()
-                                                          ])
+        return obj.content #markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'toc',
+                                                        #   'extra', #EscapedNewLineExtension()
+                                                        #   ])

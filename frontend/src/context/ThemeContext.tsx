@@ -25,11 +25,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         link.rel = 'stylesheet'
         link.id = 'prism-theme'
 
-        if (theme === 'dark') {
-        link.href = '/prism-themes/prism-tomorrow.css'
-        } else {
-        link.href = '/prism-themes/prism.css'
-        }
+        // if (theme === 'dark') {
+        // link.href = '/prism-themes/prism-tomorrow.css'
+        // } else {
+        // link.href = '/prism-themes/prism.css'
+        // }
 
         document.head.appendChild(link)
 

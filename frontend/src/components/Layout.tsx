@@ -10,6 +10,8 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col dark:bg-gray-900 dark:text-white/80">
+      <link id="hljs-theme" rel="stylesheet" href="/hljs-themes/github.css" />
+
       <Header />
       <main className="flex-1">{children}</main>
       <div
