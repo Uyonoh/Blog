@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from 'react';
+import { setHighlightTheme } from '@/components/SyntaxHighlighter';
 
 type Theme = 'light' | 'dark';
 
@@ -21,22 +22,22 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         const storedTheme = localStorage.getItem("theme") as Theme;
         if (storedTheme) setTheme(storedTheme);
 
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.id = 'prism-theme'
+        // const link = document.createElement('link')
+        // link.rel = 'stylesheet'
+        // link.id = 'hljs-theme'
 
         // if (theme === 'dark') {
-        // link.href = '/prism-themes/prism-tomorrow.css'
+        // link.href = "/hljs-themes/monokai.css"
         // } else {
-        // link.href = '/prism-themes/prism.css'
+        // link.href = "/hljs-themes/xcode.css"
         // }
 
-        document.head.appendChild(link)
+        // document.head.appendChild(link)
 
-        return () => {
-        const existing = document.getElementById('prism-theme')
-        if (existing) existing.remove()
-        }
+        // return () => {
+        // const existing = document.getElementById('hljs-theme')
+        // if (existing) existing.remove()
+        // }
     }, []);
 
     useEffect(() => {
@@ -48,7 +49,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const toggleTheme = () => {
         setTheme((prevTheme) => {
             document.documentElement.classList.remove(prevTheme);
-            return prevTheme == "light" ? "dark" : "light"
+            const newTheme = prevTheme == "light" ? "dark" : "light"
+            setHighlightTheme(newTheme);
+            return newTheme;
         });
     };
 

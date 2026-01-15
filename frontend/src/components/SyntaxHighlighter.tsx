@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 
-function setHighlightTheme(mode: string | null) {
+export function setHighlightTheme(mode: string | null) {
   const themeLink = document.getElementById("hljs-theme");
   if (!(themeLink instanceof HTMLLinkElement)) return;
-
+  console.log("THTH; ", mode);
   themeLink.href =
     mode === "dark"
       ? "/hljs-themes/github-dark.css"
