@@ -47,21 +47,13 @@ class PostSerializer(serializers.ModelSerializer):
         write_only=True,
         source='topics', # Map to the 'topics' ManyToManyField        
     )
-    html_content = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ['id', 'title', 'image', 'content', 'author', 'created_at', 'updated_at', 
                   'comments', 'likes', 'likes_count', 'liked_by_user', 'comments_count',
-                  'summary', 'slug', 'topics', 'topic_ids', 'html_content', 'excerpt']
+                  'summary', 'slug', 'topics', 'topic_ids', 'excerpt']
         read_only_fields = ['id', 'created_at', 'updated_at']
-
-    # def get_image(self, obj):
-    #     if isinstance(obj, Post) and obj.image:
-    #         if settings.OFFLINE:
-    #             return "http://localhost:8000" + obj.image.url
-    #         else:
-    #             return obj.image.url
     
     def get_image(self, obj):
         if not obj.image:
@@ -100,14 +92,3 @@ class PostSerializer(serializers.ModelSerializer):
     
     def get_author(self, obj):
         return obj.author.username
-    
-    def get_html_content(self, obj):
-        # Convert Markdown to HTML
-        # Using extensions for better rendering:
-        # 'fenced_code': for code blocks (```python ... ```)
-        # 'nl2br': for converting single newlines to <br> tags (like hitting Enter once)
-        # 'extra': for additional features like tables and footnotes
-        # , 'codehilite', 'admonition'
-        return obj.content #markdown.markdown(obj.content, extensions=['fenced_code', 'nl2br', 'toc',
-                                                        #   'extra', #EscapedNewLineExtension()
-                                                        #   ])
