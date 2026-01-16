@@ -3,14 +3,23 @@ from django.db.models import F
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from .models import Post, Comment, Like, Topic
 from .serializers import PostSerializer, CommentSerializer, LikeSerializer, TopicSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
+# Paginators
+class PostPagination(PageNumberPagination):
+    page_size = 9
+    page_size_query_param = "n"
+    max_page_size = 30
+
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    pagination_class = PostPagination
     lookup_field = "slug"
 
     def get_queryset(self):
@@ -27,14 +36,15 @@ class PostViewSet(viewsets.ModelViewSet):
             return Post.objects.none()
 
         search_query = SearchQuery(query)
-
-        return (
+        results =  (
             queryset.annotate(
                 rank=SearchRank(F("search_vector"), search_query)
             )
             .filter(rank__gte=0.2)
             .order_by("-rank", "-updated_at")
         )
+
+        return results
 
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])

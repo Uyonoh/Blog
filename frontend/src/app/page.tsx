@@ -1,10 +1,12 @@
 import { Post, PostCard } from "../components/PostCard";
 import { getPosts } from "@/lib/data";
+import type { SearchResponse } from "@/hooks/useSearch";
 
 export const revalidate = 2; // revalidate every 60 seconds
 
 export default async function Page() {
-  const posts: Post[] = await getPosts();
+  const response: SearchResponse = await getPosts();
+  const posts = response.results
 
   if (!posts || posts.length === 0) {
     return (

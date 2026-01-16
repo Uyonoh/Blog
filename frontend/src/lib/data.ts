@@ -1,8 +1,9 @@
 import { promises } from "dns";
 import { APIROOT } from "./auth";
 import type { Post, Comment } from "@/components/PostCard";
+import { SearchResponse } from "@/hooks/useSearch";
 
-export async function getPosts(): Promise<Post[]> {
+export async function getPosts(): Promise<SearchResponse> {
   try {
     const response = await fetch(`${APIROOT}/api/posts/`, {
       // next: { revalidate: 60 }, // revalidate every 60 seconds
@@ -58,6 +59,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
   const response = await fetch(`${APIROOT}/api/posts/`);
   if (!response.ok) return [];
 
-  const posts = await response.json();
+  const res: SearchResponse = await response.json();
+  const posts = res.results
   return posts.map((post: { slug: string }) => post.slug);
 }

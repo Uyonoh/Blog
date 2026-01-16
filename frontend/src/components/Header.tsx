@@ -7,6 +7,7 @@ import DarkModeToggle from "./DarkModeToggle";
 import Auth from "./Auth";
 import { APIROOT } from "@/lib/auth";
 import { useAuth } from "@/context/AuthContext";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   // const [darkMode, setDarkMode] = useState(false);
@@ -105,11 +106,12 @@ const Header = () => {
       </nav>
 
       <div className="hidden lg:flex  items-center space-x-4">
-        <input
+        {/* <input
           type="text"
           placeholder="Search..."
           className="px-3 py-1 rounded border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-white focus:outline-none"
-        />
+        /> */}
+        <SearchBar />
 
         <DarkModeToggle />
 
