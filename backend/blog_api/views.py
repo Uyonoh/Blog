@@ -1,3 +1,5 @@
+from django.contrib.postgres.search import SearchQuery, SearchRank
+from django.db.models import F
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -10,6 +12,29 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = "slug"
+
+    def get_queryset(self):
+        # return super().get_queryset()
+        queryset = Post.objects.all()
+        query = self.request.query_params.get("q")
+
+        if not query:
+            return queryset
+        
+        # Hard safety limits
+        query = query.strip()
+        if len(query) > 100:
+            return Post.objects.none()
+
+        search_query = SearchQuery(query)
+
+        return (
+            queryset.annotate(
+                rank=SearchRank(F("search_vector"), search_query)
+            )
+            .filter(rank__gte=0.2)
+            .order_by("-rank", "-updated_at")
+        )
 
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])

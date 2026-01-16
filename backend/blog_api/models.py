@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVectorField
 from django.utils.text import slugify
 from cloudinary.models import CloudinaryField
 
@@ -19,8 +20,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     topics = models.ManyToManyField('Topic', related_name="blog_posts", blank=True)
-    # tags = models.JSONField
-    # likes = models.ManyToManyField('Like', related_name='liked_posts', blank=True)
+    
+    search_vector = SearchVectorField(null=True, editable=False)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -45,6 +46,9 @@ class Post(models.Model):
     
     class Meta:
         ordering = ["-updated_at"]
+        indexes = [
+            models.Index(fields=["-updated_at"]),
+        ]
 
 
 class Comment(models.Model):
