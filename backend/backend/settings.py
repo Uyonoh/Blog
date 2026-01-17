@@ -52,8 +52,6 @@ if CORS_REGEX_STR:
         rf"{CORS_REGEX_STR}",
     ]
 
-    BLOG_ORIGINS += CORS_ALLOWED_ORIGIN_REGEXES
-
 # Allow requests from the frontend
 CSRF_TRUSTED_ORIGINS = BLOG_ORIGINS + ["https://*-uyonohs-projects.vercel.app"]
 
