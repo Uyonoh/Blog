@@ -13,6 +13,7 @@ import dj_database_url
 from datetime import timedelta
 from pathlib import Path
 import os
+import re
 import logging
 import cloudinary
 from cloudinary import uploader
@@ -43,8 +44,18 @@ logger.info(f"OFFLINE: {OFFLINE}")
 ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(", ")
 BLOG_ORIGINS = os.environ["BLOG_ORIGINS"].split(", ")
 
+# Fetch the regex string from environment variables
+CORS_REGEX_STR = os.getenv('BLOG_REGEX')
+
+if CORS_REGEX_STR:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        rf"{CORS_REGEX_STR}",
+    ]
+
+    BLOG_ORIGINS += CORS_ALLOWED_ORIGIN_REGEXES
+
 # Allow requests from the frontend
-CSRF_TRUSTED_ORIGINS = BLOG_ORIGINS
+CSRF_TRUSTED_ORIGINS = BLOG_ORIGINS + ["https://*-uyonohs-projects.vercel.app"]
 
 CORS_ALLOWED_ORIGINS = BLOG_ORIGINS
 
