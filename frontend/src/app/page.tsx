@@ -1,12 +1,20 @@
 import { Post, PostCard } from "../components/PostCard";
 import { getPosts } from "@/lib/data";
 import type { SearchResponse } from "@/hooks/useSearch";
+import PostPagination from "@/components/PostPagination";
 
 export const revalidate = 2; // revalidate every 60 seconds
 
-export default async function Page() {
-  const response: SearchResponse = await getPosts();
-  const posts = response.results
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const query = await searchParams;
+  const page = Number(query?.page ?? 1);
+
+  const data: SearchResponse = await getPosts(page);
+  const posts = data.results;
 
   if (!posts || posts.length === 0) {
     return (
@@ -26,6 +34,8 @@ export default async function Page() {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
+
+      <PostPagination currentPage={data.page} totalPages={data.total_pages} />
     </div>
   );
 }

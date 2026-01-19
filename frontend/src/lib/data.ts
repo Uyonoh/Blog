@@ -2,10 +2,12 @@ import { promises } from "dns";
 import { APIROOT } from "./auth";
 import type { Post, Comment } from "@/components/PostCard";
 import { SearchResponse } from "@/hooks/useSearch";
+import { cache } from "react";
 
-export async function getPosts(): Promise<SearchResponse> {
+export async function getPosts(page: number): Promise<SearchResponse> {
   try {
-    const response = await fetch(`${APIROOT}/api/posts/`, {
+    const response = await fetch(`${APIROOT}/api/posts/?page=${page}`, {
+      cache: "no-store",
       // next: { revalidate: 60 }, // revalidate every 60 seconds
     });
     return response.json();
@@ -13,7 +15,7 @@ export async function getPosts(): Promise<SearchResponse> {
     console.error("Failed to fetch posts:", error);
     throw new Error("Failed to fetch posts");
   } finally {
-    console.info("Finished api call to /api/posts/");
+    console.info(`Finished API call to ${APIROOT}/api/posts/?page=${page}`);
   }
 }
 
@@ -30,7 +32,6 @@ export async function getPostBySlug(slug: string): Promise<Post> {
       console.error("Received non-JSON response:", errorText);
       throw new Error("Server did not return JSON");
     }
-
 
     return response.json();
   } catch (error: unknown) {
@@ -60,6 +61,6 @@ export async function getAllPostSlugs(): Promise<string[]> {
   if (!response.ok) return [];
 
   const res: SearchResponse = await response.json();
-  const posts = res.results
+  const posts = res.results;
   return posts.map((post: { slug: string }) => post.slug);
 }
