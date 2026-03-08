@@ -257,7 +257,7 @@ if not OFFLINE:
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            "BACKEND": "backend.storage.IgnoreMissingManifestStorage",
         },
     }
 
