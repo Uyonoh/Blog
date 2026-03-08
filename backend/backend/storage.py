@@ -6,7 +6,7 @@ from whitenoise.storage import MissingFileError
 class IgnoreMissingManifestStorage(CompressedManifestStaticFilesStorage):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
     def post_process(self, *args, **kwargs):
         files = super().post_process(*args, **kwargs)
 
@@ -16,5 +16,6 @@ class IgnoreMissingManifestStorage(CompressedManifestStaticFilesStorage):
         # Make exception messages helpful
         for name, hashed_name, processed in files:
             if isinstance(processed, MissingFileError):
-                processed = True
+                # Skip if missing
+                continue
             yield name, hashed_name, processed
