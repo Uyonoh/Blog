@@ -8,14 +8,14 @@ from cloudinary.models import CloudinaryField
 # anon = User.objects.filter(username="Anonymous")[0]
 
 class Post(models.Model):
-    title = models.CharField(max_length=90)
-    slug = models.SlugField(max_length=100, unique=True, blank=True, null=True)
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=250, unique=True, blank=True, null=True)
     if settings.OFFLINE:
         image = models.ImageField(upload_to="posts/")
     else:
         image = CloudinaryField("image", folder="Posts")
     content = models.TextField()
-    excerpt = models.CharField(max_length=150, null=True, blank=True)
+    excerpt = models.CharField(max_length=300, null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,13 +27,13 @@ class Post(models.Model):
         i = 1
         base_slug = self.slug
         # Exclude 'self' from the check so it doesn't collide with its own existing slug
-        queryset = super().objects.filter(slug=self.slug)
+        queryset = Post.objects.filter(slug=self.slug)
         if self.pk:
             queryset = queryset.exclude(pk=self.pk)
 
         while queryset.exists():
             self.slug = f"{base_slug}_{i}"
-            queryset = super().objects.filter(slug=self.slug)
+            queryset = Post.objects.filter(slug=self.slug)
             if self.pk:
                 queryset = queryset.exclude(pk=self.pk)
             i += 1
