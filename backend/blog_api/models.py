@@ -23,21 +23,33 @@ class Post(models.Model):
     
     search_vector = SearchVectorField(null=True, editable=False)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    def check_slug(self):
+        i = 1
+        base_slug = self.slug
+        # Exclude 'self' from the check so it doesn't collide with its own existing slug
+        queryset = super().objects.filter(slug=self.slug)
+        if self.pk:
+            queryset = queryset.exclude(pk=self.pk)
 
+        while queryset.exists():
+            self.slug = f"{base_slug}_{i}"
+            queryset = super().objects.filter(slug=self.slug)
+            if self.pk:
+                queryset = queryset.exclude(pk=self.pk)
+            i += 1
+
+    def make_slug(self):
         # Auto add slug
         if not self.slug:
             self.slug = slugify(self.title)
+        else:
+            self.slug = slugify(self.slug)
+        
+        self.check_slug()
 
-            # Check if slug already exists
-            i = 1
-            slug = self.slug
-            while Post.objects.filter(slug=slug).count() > 0:
-                slug = f"{self.slug}_{i}"
-                i += 1
-            self.slug = slug
-            self.save()
+    def save(self, *args, **kwargs):
+        self.make_slug()
+        super().save(*args, **kwargs)
         
         # TODO: Auto add excerpt using AI if None
 
@@ -87,6 +99,8 @@ class Topic(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
+        else:
+            self.slug = slugify(self.slug)
         super().save(*args, **kwargs)
 
     def __str__(self):
