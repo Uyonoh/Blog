@@ -102,17 +102,17 @@ export const PostCard = ({ post }: PostCardProps) => {
       </div>
 
       {/* main body */}
-      <div className="flex flex-col align-center justify-start relative h-85 w-full mt-2 overflow-hidden">
+      <div className="flex flex-col align-center justify-start relative h-75 w-full mt-2 overflow-hidden">
         <img
           src={post.image}
           alt="Image"
           className="w-full h-45 object-cover rounded-b-lg dark:text-gray-300"
         />
-        <div className="p-2">
+        <div className="p-2 py-3">
           <h2 className="w-auto text-xl font-semibold text-gray-800 dark:text-gray-300">
             {post.title}
           </h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">{ post.excerpt }</p>
+          {/* <p className="text-gray-500 dark:text-gray-400 mt-2">{ post.excerpt }</p> */}
         </div>
         
       </div>
