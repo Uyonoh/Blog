@@ -2,8 +2,15 @@ import { Post, PostCard } from "../components/PostCard";
 import { getPosts } from "@/lib/data";
 import type { SearchResponse } from "@/hooks/useSearch";
 import PostPagination from "@/components/PostPagination";
+import { Metadata } from "next";
 
-export const revalidate = 2; // revalidate every 60 seconds
+export const metadata: Metadata = {
+  title: "Latest Engineering Insights",
+  description:
+    "Browse the latest articles on software architecture, frontend performance, and technical SEO.",
+};
+
+export const revalidate = 3600; // revalidate every hour
 
 export default async function Page({
   searchParams,
@@ -18,24 +25,35 @@ export default async function Page({
 
   if (!posts || posts.length === 0) {
     return (
-      <div className="text-center mt-10 text-gray-500 dark:text-gray-300">
-        No posts available.
+      <div className="text-center mt-20 text-zinc-500 dark:text-zinc-400">
+        <p className="text-xl">No posts available at the moment.</p>
+        <p className="mt-2 text-sm">Please check back later.</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 pt-2 pb-7">
-      <h1 className="text-5xl font-bold text-center text-blue-600 dark:text-gray-200 mb-8">
-        {/* Blog Posts */}
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-12">
+    <main className="container mx-auto px-6 pt-12 pb-20">
+      <section className="mb-16 text-center max-w-2xl mx-auto">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 dark:text-zinc-100 mb-6 tracking-tight">
+          Engineering{" "}
+          <span className="text-blue-600 dark:text-blue-400">Insights</span>
+        </h1>
+        <p className="text-zinc-600 dark:text-zinc-400 text-lg md:text-xl">
+          Deep dives into modern web technologies and software development
+          practices.
+        </p>
+      </section>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
 
-      <PostPagination currentPage={data.page} totalPages={data.total_pages} />
-    </div>
+      <div className="mt-16">
+        <PostPagination currentPage={data.page} totalPages={data.total_pages} />
+      </div>
+    </main>
   );
 }

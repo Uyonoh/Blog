@@ -24,18 +24,29 @@ const CommentForm = ({ onSubmit }: CommentFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+    <form onSubmit={handleSubmit} className="p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-4">
+      <label htmlFor="comment-textarea" className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+        Leave a comment
+      </label>
       <textarea
-        placeholder="Write your comment..."
+        id="comment-textarea"
+        placeholder="Share your thoughts on this post..."
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        className="border p-2 mb-2 w-full rounded dark:bg-gray-900 dark:text-white"
+        required
+        aria-required="true"
+        minLength={2}
+        className="w-full min-h-[120px] p-4 border border-zinc-300 dark:border-zinc-700 rounded-lg dark:bg-zinc-900 dark:text-white transition-focus focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-y"
       />
-      <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full disabled:bg-gray-400"
-        disabled={!content || content.length < 2}>
-        Submit Comment
+      <button 
+        type="submit" 
+        className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors duration-300 disabled:bg-zinc-300 dark:disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed"
+        disabled={!content || content.length < 2}
+      >
+        Post Comment
       </button>
     </form>
+
   );
 };
 

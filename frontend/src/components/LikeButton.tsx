@@ -49,11 +49,20 @@ export default function LikeButton({ slug, initialLikes, initialLiked, postLikes
     <button
       onClick={handleLike}
       disabled={!user}
-      className={`px-4 py-2 mt-4 rounded flex items-start gap-2 bg-blue-500 hover:bg-blue-600 text-white font-bold transition ${(liked || !user) ? "bg-gray-400 hover:bg-gray-500" : "" }`}
+      aria-label={liked ? "Remove like" : "Like this post"}
+      aria-pressed={liked}
+      title={!user ? "Login to like this post" : ""}
+      className={`px-5 py-2.5 rounded-full flex items-center gap-2 font-bold transition-all duration-300 shadow-sm
+        ${liked 
+          ? "bg-blue-600 text-white hover:bg-blue-700" 
+          : !user 
+            ? "bg-zinc-200 text-zinc-500 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600" 
+            : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+        }`}
     >
-      <ThumbsUp size={18} />
-      <span>{likes > 0 ? likes : ""} </span>
-      {/* {liked ? "Liked" : "Like"} */}
+      <ThumbsUp size={18} className={liked ? "fill-current" : ""} />
+      <span>{likes > 0 ? likes : "Like"}</span>
     </button>
+
   );
 }

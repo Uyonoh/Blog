@@ -1,14 +1,7 @@
-"use client";
-
 import React from "react";
-import { useRouter } from "next/navigation";
-import { ThumbsUp, MessageCircle, Heart } from 'lucide-react';
-
-// Define a more specific type for the post
-// type Author = {
-//   id: number;
-//   username: string;
-// }
+import Link from "next/link";
+import Image from "next/image";
+import { ThumbsUp, MessageCircle } from 'lucide-react';
 
 export type Comment = {
   id: number;
@@ -30,7 +23,7 @@ export type Topic = {
 };
 
 export type Post = {
-  id: number;       // or string, depending on your backend
+  id: number;
   slug: string;
   title: string;
   image: string;
@@ -53,90 +46,72 @@ type PostCardProps = {
 };
 
 export const PostCard = ({ post }: PostCardProps) => {
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push(`/post/${post.slug}`);
-  };
-
-  const parseDate =  (date:string) => {
+  const parseDate = (date: string) => {
     date = date.split("T")[0];
-    let dates:string[] = date.split("-");
+    let dates: string[] = date.split("-");
     const today = new Date();
-    if (dates[0] == today.getFullYear().toString()) {
+    if (dates[0] === today.getFullYear().toString()) {
       dates = dates.slice(1);
     }
-    date = dates.join("-");
- 
-    return date;
-  }
-
-  const parseTopics = (topics:Topic[]) => {
-    const names:string[] = topics.map((topic:Topic) => {;
-      return topic.name
-    });
-
-    return names //names.join(" | ")
-  }
+    return dates.join("-");
+  };
 
   return (
-    <div
-      className="bg-white dark:bg-inherit shadow-lg dark:shadow-gray-800 rounded-lg overflow-hidden hover:shadow-xl hover:scale-102 transition-shadow transition-transform duration-300"
-      onClick={handleClick}
+    <article
+      className="bg-white dark:bg-zinc-900 shadow-md dark:shadow-none border border-transparent dark:border-zinc-800 rounded-xl overflow-hidden hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 flex flex-col h-full"
     >
-      {/* card head */}
-      <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4">
-        <span className="text-gray-500 dark:text-gray-100 text-sm">
-          {post.author}
-        </span>
+      <Link href={`/post/${post.slug}`} className="block flex-grow group">
+        <header className="flex justify-between bg-zinc-50 dark:bg-zinc-800/50 p-4">
+          <span className="text-zinc-600 dark:text-zinc-400 text-sm font-medium">
+            {post.author}
+          </span>
 
-        {/* Topic */}
-        <div className="topics">
-          {parseTopics(post.topics).map((topic, key) =>{
-            return <span key={key} className="text-blue-500 dark:text-yellow-500 text-sm cursor-pointer">{topic}</span>
-          })}
+          <div className="flex gap-2">
+            {post.topics.slice(0, 2).map((topic, key) => (
+              <span key={key} className="text-blue-600 dark:text-blue-400 text-sm font-semibold">
+                #{topic.name}
+              </span>
+            ))}
+          </div>
+        </header>
+
+        <div className="relative aspect-video w-full overflow-hidden">
+          <Image
+            src={post.image}
+            alt={`Cover image for ${post.title}`}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
-        {/* <span className="text-blue-500 dark:text-yellow-500 text-sm">
-          {parseTopics(post.topics)}
-        </span> */}
-      </div>
 
-      {/* main body */}
-      <div className="flex flex-col align-center justify-start relative h-75 w-full mt-2 overflow-hidden">
-        <img
-          src={post.image}
-          alt="Image"
-          className="w-full h-45 object-cover rounded-b-lg dark:text-gray-300"
-        />
-        <div className="p-2 py-3">
-          <h2 className="w-auto text-xl font-semibold text-gray-800 dark:text-gray-300">
+        <div className="p-5">
+          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
             {post.title}
           </h2>
-          {/* <p className="text-gray-500 dark:text-gray-400 mt-2">{ post.excerpt }</p> */}
+          <p className="text-zinc-600 dark:text-zinc-400 mt-3 line-clamp-3 text-sm leading-relaxed">
+            {post.excerpt || post.summary}
+          </p>
         </div>
-        
-      </div>
+      </Link>
 
-      {/* Footer */}
-      <div className="flex justify-between bg-gray-100 dark:bg-gray-500 p-4 text-gray-500 dark:text-gray-100">
-        <span className="text-sm">{parseDate(post.created_at)}</span>
+      <footer className="flex justify-between items-center p-5 pt-0 mt-auto text-zinc-500 dark:text-zinc-500">
+        <time dateTime={post.created_at} className="text-sm font-medium">
+          {parseDate(post.created_at)}
+        </time>
 
-        {/* Favourites, comments, likes */}
-        <div className="flex justify-between gap-2">
-          {/* <span className="text-sm flex gap-1">
-            <Heart size={18} />
-            <span>20</span>
-          </span> */}
-          <span className="text-sm flex gap-1">
-            <MessageCircle size={18} />
+        <div className="flex items-center gap-4">
+          <span className="text-sm flex items-center gap-1.5" aria-label={`${post.comments_count} comments`}>
+            <MessageCircle size={16} />
             <span>{post.comments_count}</span>
           </span>
-          <span className="text-sm flex gap-1">
-            <ThumbsUp size={18} />
+          <span className="text-sm flex items-center gap-1.5" aria-label={`${post.likes_count} likes`}>
+            <ThumbsUp size={16} />
             <span>{post.likes_count}</span>
           </span>
         </div>
-      </div>
-    </div>
+      </footer>
+    </article>
   );
 };
+

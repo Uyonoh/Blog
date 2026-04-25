@@ -37,11 +37,12 @@ li {
   background-color: var(--pre-bg-light);
   padding: 1rem;
   border-radius: 5px;
+  overflow-x: auto;
 }
 html.dark .markdown pre {
   background-color: var(--pre-bg-dark);
 }
 
-.markdown code {
+/* .markdown code {
   overflow: auto;
-}
+} */
