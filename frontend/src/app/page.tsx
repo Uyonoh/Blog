@@ -5,9 +5,9 @@ import PostPagination from "@/components/PostPagination";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Latest Engineering Insights",
+  title: "Uyonoh's Blog | Latest Engineering Insights",
   description:
-    "Browse the latest articles on software architecture, frontend performance, and technical SEO.",
+    "Browse the latest articles on software engineering, technical SEO, and modern web development architectures.",
 };
 
 export const revalidate = 3600; // revalidate every hour
