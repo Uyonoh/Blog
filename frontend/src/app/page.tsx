@@ -33,11 +33,11 @@ export default async function Page({
   }
 
   return (
-    <main className="container mx-auto px-6 pt-12 pb-20">
+    <main className="container mx-auto px-6 pt-6 pb-20">
       <section className="mb-16 text-center max-w-2xl mx-auto">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 dark:text-zinc-100 mb-6 tracking-tight">
-          Engineering{" "}
-          <span className="text-blue-600 dark:text-blue-400">Insights</span>
+        <h1 className="text-3xl md:text-5xl lg:text-5xl font-black text-zinc-900 dark:text-zinc-100 mb-6 tracking-tight">
+          Uyonoh's{" "}
+          <span className="text-blue-600 dark:text-blue-400">Blog</span>
         </h1>
         <p className="text-zinc-600 dark:text-zinc-400 text-lg md:text-xl">
           Deep dives into modern web technologies and software development

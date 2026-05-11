@@ -60,14 +60,12 @@ const Header = () => {
   // TODO: Convert menu to usestate based
   return (
     <header className="header bg-white dark:bg-gray-900 shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
-      {/* <Link href="/"> */}
-      <h1
+      <Link
+        href="/"
         className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer"
-        onClick={() => router.push("/")}
       >
         Uyonoh&apos;s Blog
-      </h1>
-      {/* </Link> */}
+      </Link>
 
       <div
         id="open-menu"
@@ -165,10 +163,12 @@ const Header = () => {
         <div className="fixed inset-0 z-50"></div>
         <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <Link href="/" onClick={toggleMenu}>
-              <h1 className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer">
-                Uyonoh&apos;s Blog
-              </h1>
+            <Link
+              href="/"
+              onClick={toggleMenu}
+              className="text-2xl font-bold text-gray-800 dark:text-white cursor-pointer"
+            >
+              Uyonoh&apos;s Blog
             </Link>
 
             {/* Replace with component */}

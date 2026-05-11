@@ -23,25 +23,7 @@ export default function PostDetail({ post, postComments }: Props) {
       itemType="https://schema.org/BlogPosting"
     >
       <header className="mb-12">
-        <h1
-          className="text-4xl lg:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 leading-tight mb-6"
-          itemProp="headline"
-        >
-          {post.title}
-        </h1>
-
-        {/* Topic tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {post.topics.map((topic, index) => (
-            <span
-              key={index}
-              className="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-semibold"
-            >
-              #{topic.name}
-            </span>
-          ))}
-        </div>
-
+        {/* Aurthor and pub info */}
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-800 rounded-full flex items-center justify-center overflow-hidden">
             <span className="text-zinc-500 font-bold">
@@ -68,6 +50,26 @@ export default function PostDetail({ post, postComments }: Props) {
             </time>
           </div>
         </div>
+
+        {/* Topic tags */}
+        <div className="flex flex-wrap gap-2 mt-6 mb-6">
+          {post.topics.map((topic, index) => (
+            <span
+              key={index}
+              className="bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-semibold"
+            >
+              #{topic.name}
+            </span>
+          ))}
+        </div>
+
+        {/* Title */}
+        <h1
+          className="text-4xl lg:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 leading-tight mb-6"
+          itemProp="headline"
+        >
+          {post.title}
+        </h1>
       </header>
 
       <div className="relative aspect-video w-full mb-10 overflow-hidden rounded-2xl shadow-lg">
