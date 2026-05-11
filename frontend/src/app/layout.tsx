@@ -49,6 +49,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://blog.uyonoh.com",
   },
+  openGraph: {
+    siteName: "Uyonoh's Blog",
+    title: "Uyonoh's Blog | Latest Engineering Insights",
+    description: "Browse the latest articles on software engineering...",
+    url: "https://blog.uyonoh.com",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -60,8 +67,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Uyonoh's Blog",
+    alternateName: ["Low-Level Docks", "Uyonoh"],
     url: "https://blog.uyonoh.com",
-    description: "Engineering and Technical Insights by Uyonoh",
+    description:
+      "Explore deep dives into software engineering, technical SEO, and modern web development architectures.",
     publisher: {
       "@type": "Organization",
       name: "Uyonoh",
