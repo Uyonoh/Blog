@@ -8,7 +8,12 @@ set -o errexit
 #uv venv .venv
 #source .venv/bin/activate
 
-pip install -r requirements.txt
+#pip install -r requirements.txt
+
+pip install uv
+uv sync
+
+source .venv/bin/activate
 
 python manage.py collectstatic --no-input
 
