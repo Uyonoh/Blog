@@ -89,6 +89,8 @@ INSTALLED_APPS += [
     # Your app
     'users',
     'blog_api',
+
+    'health_check',
 ]
 
 MIDDLEWARE = [
