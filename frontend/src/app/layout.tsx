@@ -47,13 +47,13 @@ export const metadata: Metadata = {
     google: "cjK7AMrx63AvyjmZa2NMJ5OrBqexsGy0ToNSbO3vbJM",
   },
   alternates: {
-    canonical: "https://blog.uyonoh.com",
+    canonical: "https://blog.uyonoh.com/",
   },
   openGraph: {
     siteName: "Uyonoh's Blog",
     title: "Uyonoh's Blog | Latest Engineering Insights",
     description: "Browse the latest articles on software engineering...",
-    url: "https://blog.uyonoh.com",
+    url: "https://blog.uyonoh.com/",
     type: "website",
   },
 };
@@ -67,17 +67,14 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Uyonoh's Blog",
-    alternateName: ["Low-Level Docks", "Uyonoh"],
-    url: "https://blog.uyonoh.com",
+    alternateName: ["Blog - Uyonoh", "Dev Uyonoh"],
+    url: "https://blog.uyonoh.com/",
     description:
       "Explore deep dives into software engineering, technical SEO, and modern web development architectures.",
     publisher: {
-      "@type": "Organization",
+      "@type": "Person",
       name: "Uyonoh",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://blog.uyonoh.com/logo.png",
-      },
+      url: "https://uyonoh.com/",
     },
   };
 
