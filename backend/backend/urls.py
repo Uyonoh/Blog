@@ -20,7 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from dj_rest_auth.views import LoginView, LogoutView
 from dj_rest_auth.registration.views import RegisterView
+from django.views.decorators.csrf import csrf_exempt
 from .views import get_current_user, CustomTokenObtainPairView
+from health_check.views import HealthCheckView
 
 
 from django.http import JsonResponse
@@ -37,6 +39,17 @@ urlpatterns = [
     # path('auth/csrf/', get_csrf_token),
     path('auth/', include('users.urls')),
     path('', include('blog_api.urls')),
+    path('health/',
+         csrf_exempt(
+            HealthCheckView.as_view(
+                checks=[
+                    "health_check.Database",
+                    "health_check.Cache",
+                    #"health_check.Storage",
+                    ]
+                )
+            ),
+         ),
 ]
 
 if settings.DEBUG:
