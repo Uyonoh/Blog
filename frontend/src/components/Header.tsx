@@ -98,7 +98,7 @@ const Header = () => {
       <nav className="hidden lg:flex space-x-6 text-gray-700 dark:text-gray-300 *:hover:text-blue-500">
         <Link href="/">Home</Link>
         <Link href="/topics">Topics</Link>
-        <Link href="/contact">Contact</Link>
+        <Link href="https://uyonoh.com/">Contact</Link>
 
         {isAdmin && <Link href="/post/create/">Create</Link>}
       </nav>
@@ -273,7 +273,7 @@ const Header = () => {
                     Topics
                   </Link>
                   <Link
-                    href="/contact"
+                    href="https://uyonoh.com/"
                     className="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                     aria-controls="disclosure-1"
                     aria-expanded="false"
